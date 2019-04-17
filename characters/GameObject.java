@@ -1,5 +1,6 @@
 package characters;
 
+import frame.GameFrame;
 import resource.util.ResourcesManager;
 
 import javax.swing.*;
@@ -26,6 +27,12 @@ public class GameObject {
         this.imageHeight = imageHeight;
     }
 
+    public void move(){
+        x += dx;
+        y += dy;
+        setBoundary();
+    }
+
     public void setImage(String imagePath){
         this.image = ResourcesManager.getInstance().getImage(imagePath);
     }
@@ -48,6 +55,6 @@ public class GameObject {
     }
 
     public void paint(Graphics g){
-        g.drawImage(image, 0, 0, 500, 700, 0, 0, 544, 544, null);
+        g.drawImage(image, 0, 0, GameFrame.FRAME_WIDTH, GameFrame.FRAME_HEIGHT, 0, 0, image.getWidth(), image.getHeight(), null);
     }
 }
