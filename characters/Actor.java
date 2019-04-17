@@ -2,19 +2,23 @@ package characters;
 
 import characters.floor.Floor;
 
-import javax.xml.stream.FactoryConfigurationError;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class Actor extends GameObject{
+    private final int HUNGER_MODE = 75; // 轉換模式 飢餓程度數值
     public static final int MOVE_DOWN = 0;
     public static final int MOVE_RIGHT = 1;
     public static final int MOVE_UP = 2;
     public static final int MOVE_LEFT = 3;
     public static final int[] MOVING_PATTERN = {0, 1, 2, 3, 2, 1}; // 走路模式
-    public static int FALLING_SPEED = 4;
-    public static int MOVING_SPEED = 8;
+    public static int FALLING_SPEED_FAT = 4;
+    public static int MOVING_SPEED_FAT = 3;
+    public static int FALLING_SPEED_SLIM = 2;
+    public static int MOVING_SPEED_SLIM = 8;
 
+    private int hunger; // 飢餓程度
+    private boolean state; // 胖瘦狀態 true:肥 false:瘦
     private int direction;
     private int movingAction;
 
@@ -25,7 +29,10 @@ public class Actor extends GameObject{
     public Actor(int x, int y, int imageWidth, int imageHeight){
         super(x, y, imageWidth, imageHeight);
         direction = MOVE_DOWN;
-        dy = FALLING_SPEED;
+        dy = FALLING_SPEED_FAT;
+        hunger = 0;
+        delay = 5;
+        state = true;
     }
 
     @Override
@@ -46,35 +53,58 @@ public class Actor extends GameObject{
         this.movingAction++;
     }
 
-    public boolean checkOnFloor(Floor floor){
-//        boolean onFloor = false;
+    public void changeState(){
+        if (hunger > HUNGER_MODE){
+            state = false;
+        }else {
+            state = true;
+        }
+    }
+
+    public boolean getState(){
+        return this.state;
+    }
+
+    private boolean checkOnFloor(Floor floor){
         if(this.bottom > floor.bottom){
-            dy = FALLING_SPEED;
+            if(this.state){
+                dy = FALLING_SPEED_FAT;
+            }else {
+                dy = FALLING_SPEED_SLIM;
+            }
             return false;
         }
         if(this.right > floor.left || this.left < floor.right){
             if(this.left > floor.right || this.right < floor.left){
-                dy = FALLING_SPEED;
-                return false;
-            }else {
-                if(this.bottom + dy > floor.top){
-                    dy = floor.dy;
-                    y = floor.top - imageHeight;
-                    return true;
+                if(this.state){
+                    dy = FALLING_SPEED_FAT;
+                }else {
+                    dy = FALLING_SPEED_SLIM;
                 }
+                return false;
+            }
+            if(this.bottom > floor.top){
+                dy = floor.dy;
+                y = floor.top - imageHeight + dy;
+                return true;
             }
         }else {
-            dy = FALLING_SPEED;
+            if(this.state){
+                dy = FALLING_SPEED_FAT;
+            }else {
+                dy = FALLING_SPEED_SLIM;
+            }
             return false;
         }
         return false;
     }
 
     public boolean checkOnFloor(ArrayList<Floor> floors){
+        boolean isOnFloor = false;
         for (Floor floor : floors) {
-            checkOnFloor(floor);
+            isOnFloor = checkOnFloor(floor);
         }
-        return false;
+        return isOnFloor;
     }
 
     @Override

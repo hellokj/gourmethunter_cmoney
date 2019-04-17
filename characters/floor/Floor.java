@@ -2,13 +2,16 @@ package characters.floor;
 
 import characters.GameObject;
 import characters.rule.MovementRule;
+import resource.util.ResourcesManager;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Floor extends GameObject {
     public static int RISING_SPEED = -4;
     private int generationRate;
     private MovementRule movementRule;
+    private static BufferedImage image = ResourcesManager.getInstance().getImage("src/resources/Floor1.png");
 
 
     public Floor(){
@@ -17,8 +20,8 @@ public class Floor extends GameObject {
 
     public Floor(int x, int y, int imageWidth, int imageHeight){
         super(x, y, imageWidth, imageHeight);
-//        dy = RISING_SPEED;
-        dy = -1;
+        dy = -(int)(Math.random()*4 + 1);
+//        dy = -1;
     }
 
     public Floor(int x, int y, int imageWidth, int imageHeight, String imagePath){

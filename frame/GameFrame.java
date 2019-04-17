@@ -1,6 +1,6 @@
 package frame;
 
-import panels.MainPanel;
+import scene.MainPanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

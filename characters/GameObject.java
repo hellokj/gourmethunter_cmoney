@@ -14,6 +14,8 @@ public class GameObject {
     public int imageOffsetX, imageOffsetY; // 選擇圖片 偏移量
     public int dx, dy; // 方向速度
     public int top, bottom, left, right; // 圖片本身邊界
+    public int delayCount;
+    public int delay;
     public BufferedImage image; // 圖片
 
     public GameObject(){
@@ -25,12 +27,24 @@ public class GameObject {
         this.y = y;
         this.imageWidth = imageWidth;
         this.imageHeight = imageHeight;
+        setBoundary();
     }
 
     public void move(){
         x += dx;
         y += dy;
         setBoundary();
+    }
+
+    public boolean delay(){
+        System.out.println(delayCount);
+        if(delayCount == delay){
+            delayCount = 0;
+            return true;
+        }else {
+            delayCount++;
+            return false;
+        }
     }
 
     public void setImage(String imagePath){
@@ -55,6 +69,6 @@ public class GameObject {
     }
 
     public void paint(Graphics g){
-        g.drawImage(image, 0, 0, GameFrame.FRAME_WIDTH, GameFrame.FRAME_HEIGHT, 0, 0, image.getWidth(), image.getHeight(), null);
+        g.drawImage(image, 0, 0, imageWidth, imageHeight, 0, 0, image.getWidth(), image.getHeight(), null);
     }
 }
