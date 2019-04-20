@@ -1,9 +1,11 @@
-package scene;
+package frame;
 
 import characters.Actor;
 import characters.GameObject;
 import characters.floor.Floor;
-import characters.floor.FloorGenerator;
+import characters.rule.NormalRule;
+import characters.rule.Rule;
+import characters.rule.RunningRule;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +22,9 @@ public class MainPanel extends JPanel {
     private GameObject roof;
     private Actor player;
     private ArrayList<Floor> floors;
-    private FloorGenerator floorGenerator;
+    private NormalRule normalRule;
+    private RunningRule runningRule;
+//    private FloorGenerator floorGenerator;
     private int key;
 
     public MainPanel(){
@@ -30,44 +34,55 @@ public class MainPanel extends JPanel {
         player = new Actor(250, 100, 32, 32);
         player.setImage("src/resources/Actor.png");
 
-        background = new GameObject();
+        background = new GameObject(0, 0, 1417, 1984, 500, 700);
         background.setImage("src/resources/EgyptBackground.png");
 
-        roof = new GameObject(0, 0, 500, 32);
+        roof = new GameObject(0, 0, 500, 32, 500, 32);
         roof.setImage("src/resources/Roof.png");
 
+        // rule 測試區
+        normalRule = new NormalRule();
+        runningRule = new RunningRule(6);
+
         floors = new ArrayList<>();
-        floorGenerator = new FloorGenerator();
-        floors.add(new Floor(player.x - 16, player.y + 32, 64, 16)); // 初始站立的階梯
+//        floorGenerator = new FloorGenerator();
+        floors.add(new Floor(player.x - 16, player.y + 32, normalRule)); // 初始站立的階梯
+        floors.add(new Floor(player.x - 16 - 64, player.y + 32, normalRule)); // 初始站立的階梯
+        floors.add(new Floor(player.x - 16 - 64 - 64, player.y + 32, normalRule)); // 初始站立的階梯
+        floors.add(new Floor(player.x - 16 - 64 - 64 - 64, player.y + 32, normalRule)); // 初始站立的階梯
+        floors.add(new Floor(player.x - 16 + 64, player.y + 32, normalRule)); // 初始站立的階梯
+        floors.add(new Floor(player.x - 16 + 64 + 64, player.y + 32, normalRule)); // 初始站立的階梯
+        floors.add(new Floor(player.x - 16 + 64 + 64 + 64, player.y + 32, normalRule)); // 初始站立的階梯
+        floors.add(new Floor(100, 250, runningRule));
         for (int i = 0; i < 10; i++) {
-            floors.add(floorGenerator.genFloor(floors.get(i)));
+//            floors.add(floorGenerator.genFloor(floors.get(i)));
         }
 
         // Timer
-        Timer t1 = new Timer(20, new ActionListener() {
+        Timer t1 = new Timer(25, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // 階梯超出上邊界後消失
                 for (int i = 0; i < floors.size(); i++) {
+                    floors.get(i).stay();
                     if(floors.get(i).checkTopBoundary()){
                         floors.remove(i);
                     }
                 }
-                // 確認畫面中的階梯數至少有10個
+                // 遊戲中(非畫面中)的階梯總數至少有10個
+//                player.stay();
                 if(floors.size() < 10){
                     for (int i = floors.size(); i < 10; i++) {
-//                            System.out.println(floors.size());
-                        floors.add(floorGenerator.genFloor(floors));
+//                        floors.add(floorGenerator.genFloor(floors));
                     }
                 }
                 // 確認人物是否站立於階梯上
                 if (!player.checkLeftRightBoundary(MainPanel.this)){
-                    if (player.checkOnFloor(floors)){
-                        player.stay();
-                    }else {
+                    if (!player.checkOnFloor(floors)){
                         player.move();
                     }
                 }
+                player.fall();
                 // 階梯持續上升
                 for (Floor floor : floors) {
                     floor.rise();
@@ -99,10 +114,11 @@ public class MainPanel extends JPanel {
 //            }
             if (key == KeyEvent.VK_LEFT){
                 player.changeDir(Actor.MOVE_LEFT);
+//                player.choosingImagesCounter++;
                 if (player.getState()){
-                    player.dx = -MOVING_SPEED_FAT;
+                    player.dx = MOVING_SPEED_FAT;
                 }else {
-                    player.dx = -MOVING_SPEED_SLIM;
+                    player.dx = MOVING_SPEED_SLIM;
                 }
             }
             if (key == KeyEvent.VK_R){ // 上方重來
@@ -123,10 +139,11 @@ public class MainPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g){
         background.paint(g);
-        roof.paint(g);
         for (int i = 0; i < floors.size(); i++){
             floors.get(i).paint(g);
         }
+
         player.paint(g);
+        roof.paint(g);
     }
 }
