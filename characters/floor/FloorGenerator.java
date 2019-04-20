@@ -12,6 +12,7 @@ public class FloorGenerator {
     private int FLOOR_NORMAL = 0;
     private int FLOOR_STONE = 1;
     private int FLOOR_FRAGMENT = 2;
+    private int FLOOR_RUNNING = 3;
     private int[] FLOOR_TYPE = {FLOOR_NORMAL, FLOOR_STONE};
 
     public FloorGenerator(){
@@ -21,6 +22,8 @@ public class FloorGenerator {
         floorImages.add(ResourcesManager.getInstance().getImage("src/resources/StoneFloor.png"));
     }
 
+    // 判定 新生成階梯與原所有階梯是否有重疊
+    // 若有 新生成階梯 生於該階梯下
     public Floor genFloor(ArrayList<Floor> floors){
         Floor lastFloor;
         Floor newFloor = new Floor(getRandom(64, GameFrame.FRAME_WIDTH) - 64, getRandom(GameFrame.FRAME_HEIGHT, GameFrame.FRAME_HEIGHT + 100), 64, 16, "src/resources/Floor1.png");
@@ -35,15 +38,16 @@ public class FloorGenerator {
         return newFloor;
     }
 
+    // 生成階梯必在傳入階梯底下 (機制須修改)
     public Floor genFloor(Floor floor){
-//        System.out.println(floor.bottom);
         Floor newFloor = new Floor(getRandom(64, GameFrame.FRAME_WIDTH) - 64, floor.bottom + getRandom(0, 50), 64, 16, "src/resources/Floor1.png");
-//        if (checkCollision(floor, newFloor)){
-//            newFloor = new Floor(getRandom(64, GameFrame.FRAME_WIDTH) - 64, floor.bottom + getRandom(-50, 50), 64, 16, "src/resources/Floor1.png");
+//        if (checkCollision(Brick, newFloor)){
+//            newFloor = new Floor(getRandom(64, GameFrame.FRAME_WIDTH) - 64, Brick.bottom + getRandom(-50, 50), 64, 16, "src/resources/Floor1.png");
 //        }
         return newFloor;
     }
 
+    // (預計) 傳入 畫面大小 判定畫面中至少有一定數量階梯 並生成至一定數量
     public Floor genFloor(JPanel panel, ArrayList<Floor> floors){
         int count = 0;
         for (int i = 0; i < floors.size(); i++) {
@@ -54,15 +58,16 @@ public class FloorGenerator {
         return genFloor(floors);
     }
 
+    // 簡易 階梯碰撞判定
     public boolean checkCollision(Floor floor, Floor target){
         boolean isCollision = false;
-//        int nextTop = floor.top + floor.dy, nextBottom = floor.bottom + floor.dy, nextLeft = floor.left + floor.dx, nextRight = floor.right + floor.dx;
+//        int nextTop = Brick.top + Brick.dy, nextBottom = Brick.bottom + Brick.dy, nextLeft = Brick.left + Brick.dx, nextRight = Brick.right + Brick.dx;
         if(floor.top < target.bottom){
             isCollision = true;
-//            if(floor.bottom > target.top){
+//            if(Brick.bottom > target.top){
 
-//                if(floor.left < target.right){
-//                    if (floor.right > target.left){
+//                if(Brick.left < target.right){
+//                    if (Brick.right > target.left){
 //
 //                    }
 //                }
