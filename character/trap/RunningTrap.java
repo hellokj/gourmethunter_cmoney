@@ -46,6 +46,7 @@ public class RunningTrap implements Trap {
         }
         floor.setDrawWidth(floor.getFloorImages().get(0).getWidth());
         floor.setDrawHeight(floor.getFloorImages().get(0).getHeight());
+        floor.setDrawingDelay(3);
     }
 
     @Override

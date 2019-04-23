@@ -21,6 +21,7 @@ public class SpringTrap implements Trap {
         floor.setDrawHeight(ResourcesManager.getInstance().getImage(imagePaths[0]).getHeight());
         floor.setChoosingImagesMode(choosingImagesModeBase);
         floor.setImage(ResourcesManager.getInstance().getImage(imagePaths[0]));
+        floor.setDrawingDelay(6);
     }
 
     @Override

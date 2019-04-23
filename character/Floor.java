@@ -16,6 +16,8 @@ public class Floor extends GameObject {
     private Trap trapFunction; // 機關
     private boolean isTriggered; // 角色在階梯上，觸發機關
 
+    private int drawingDelayCount, drawingDelay; // 繪製動畫延遲
+
     // 目前未用到的建構子
     public Floor(int x, int y, int drawWidth, int drawHeight, String imagePath){
         super(x, y, drawWidth, drawHeight, imagePath); // 此圖用來當未被觸發的基礎圖
@@ -39,12 +41,18 @@ public class Floor extends GameObject {
     public void setChoosingImagesMode(int[] choosingImagesMode){
         this.choosingImagesMode = choosingImagesMode;
     }
+    public void setDrawingDelay(int drawingDelay) {
+        this.drawingDelay = drawingDelay;
+    }
 
     // 未被觸發的動畫選圖
     // 某些地板被觸發才播動畫，可能不適用此方法
     public void stay(){
-        this.choosingImagesCounter = choosingImagesCounter % choosingImagesMode.length;
-        this.choosingImagesCounter++;
+        if (drawingDelayCount++ == drawingDelay){
+            this.choosingImagesCounter = choosingImagesCounter % choosingImagesMode.length;
+            this.choosingImagesCounter++;
+            drawingDelayCount = 0;
+        }
     }
 
     public void isBeenTouched(Actor player){
