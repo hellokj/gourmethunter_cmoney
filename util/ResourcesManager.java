@@ -1,4 +1,4 @@
-package resource.util;
+package util;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -11,6 +11,7 @@ public class ResourcesManager {
     private int count;
 
     private static ResourcesManager resourcesManager;
+    private static String PRESET_PATH = "src/resource/"; // 預設檔案路徑前綴
 
     public static ResourcesManager getInstance(){
         if (resourcesManager == null){
@@ -35,7 +36,7 @@ public class ResourcesManager {
 
     private BufferedImage addImage(String path){
         try {
-            BufferedImage image = ImageIO.read(new File(path));
+            BufferedImage image = ImageIO.read(new File(PRESET_PATH + path));
             if(count == images.length){
                 doubleArr();
             }

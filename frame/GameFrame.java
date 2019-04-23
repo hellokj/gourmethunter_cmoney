@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GameFrame {
+public class GameFrame{
     public static final int FRAME_WIDTH = 500;
     public static final int FRAME_HEIGHT = 700;
 
