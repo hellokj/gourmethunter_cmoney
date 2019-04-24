@@ -21,12 +21,12 @@ public class EndScene extends Scene {
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void logicEvent() {
 
     }
 
     @Override
-    public void logicEvent() {
+    public void paint(Graphics g) {
 
     }
 }

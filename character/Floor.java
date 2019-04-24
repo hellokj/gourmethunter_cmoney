@@ -1,6 +1,8 @@
 package character;
 
 
+import character.food.Food;
+import character.trap.NormalTrap;
 import character.trap.Trap;
 
 import java.awt.*;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 
 public class Floor extends GameObject {
     private ArrayList<BufferedImage> floorImages; // 統一圖片回傳類型(處理地板有動畫的機制，取代GameObject只存一張圖)
+    private Food food;
 
     // 依照回傳的選圖模式來印出不同圖片
     private int[] choosingImagesMode;
@@ -25,7 +28,8 @@ public class Floor extends GameObject {
 
     public Floor(int x, int y, Trap trapFunction){
         super(x, y);
-        this.speedY = -0.1f;
+        this.speedY = -0f;
+//        this.speedY = -(float)(Math.random()*10);
         this.trapFunction = trapFunction;
         this.floorImages = new ArrayList<>();
         // 傳入陷阱類型，設定自己的狀態
@@ -43,6 +47,12 @@ public class Floor extends GameObject {
     }
     public void setDrawingDelay(int drawingDelay) {
         this.drawingDelay = drawingDelay;
+    }
+    public void setFood(Food food) {
+        this.food = food;
+    }
+    public Food getFood(){
+        return this.food;
     }
 
     // 未被觸發的動畫選圖
@@ -75,13 +85,26 @@ public class Floor extends GameObject {
 
     @Override
     public void update(){
+        // 如果身上有食物，將食物座標更新
+        if (food != null){
+            food.update();
+        }
         y += speedY;
+        // 將吃掉的食物移除
+        if (food != null){
+            if (food.isEaten()){
+                food = null;
+            }
+        }
+        setBoundary();
     }
 
     @Override
     public void paint(Graphics g){
-        setBoundary();
         // 加入不同地板動畫後，畫圖模式(測試)
+        if (food != null){
+            food.paint(g);
+        }
         try {
             //  有機會畫到還未重設的畫圖模式 會報錯
             g.drawImage(floorImages.get(choosingImagesMode[choosingImagesCounter-1]), x, y - floorImages.get(choosingImagesMode[choosingImagesCounter-1]).getHeight() + drawHeight, x + drawWidth, y + drawHeight, 0, 0, floorImages.get(choosingImagesMode[choosingImagesCounter-1]).getWidth(), floorImages.get(choosingImagesMode[choosingImagesCounter-1]).getHeight(), null);
@@ -93,4 +116,5 @@ public class Floor extends GameObject {
     public BufferedImage getCurrentDrawingImage(){
         return floorImages.get(choosingImagesMode[choosingImagesCounter-1]);
     }
+
 }

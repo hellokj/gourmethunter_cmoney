@@ -40,11 +40,11 @@ public class GameObject {
     }
 
     // 更新每次座標
-    void update(){
-
+    protected void update(){
+        setBoundary();
     }
 
-    protected void setBoundary(){
+    public void setBoundary(){
         this.top = y;
         this.bottom = y + drawHeight;
         this.left = x;
@@ -117,7 +117,6 @@ public class GameObject {
     }
 
     public void paint(Graphics g){
-        setBoundary();
-        g.drawImage(image, x, y, drawWidth, drawHeight, x, y, image.getWidth(), image.getHeight(), null);
+        g.drawImage(image, x, y, x + drawWidth, y + drawHeight, 0, 0, image.getWidth(), image.getHeight(), null);
     }
 }

@@ -13,6 +13,8 @@ public class DancingTrap implements Trap {
 
     @Override
     public void execute(Actor player, Floor floor) {
-
+        // 先記錄角色原始狀態
+        // 將角色設為不能移動
+        // 輸入完成後再回復原始狀態
     }
 }

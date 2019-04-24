@@ -11,7 +11,8 @@ import java.awt.event.KeyListener;
 public class MainPanel extends javax.swing.JPanel {
     public static final int MENU_SCENE = 0;
     public static final int GAME_SCENE = 1;
-    public static final int END_SCENE = 2;
+    public static final int LEADER_BOARD_SCENE = 2;
+    public static final int END_SCENE = 3;
 
     public interface GameStatusChangeListener{
         void changeScene(int sceneId);
@@ -66,6 +67,8 @@ public class MainPanel extends javax.swing.JPanel {
                 return new MenuScene(gsChangeListener);
             case GAME_SCENE:
                 return new GameScene(gsChangeListener);
+            case LEADER_BOARD_SCENE:
+                return new LeaderBoardScene(gsChangeListener);
             case END_SCENE:
                 return new EndScene(gsChangeListener);
         }

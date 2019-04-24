@@ -26,6 +26,9 @@ public class MenuScene extends Scene{
                         gsChangeListener.changeScene(MainPanel.GAME_SCENE);
                         break;
                     case KeyEvent.VK_2:
+                        gsChangeListener.changeScene(MainPanel.LEADER_BOARD_SCENE);
+                        break;
+                    case KeyEvent.VK_3:
                         gsChangeListener.changeScene(MainPanel.END_SCENE);
                         break;
                 }

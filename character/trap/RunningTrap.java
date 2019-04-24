@@ -8,7 +8,7 @@ public class RunningTrap implements Trap {
     public static final int generationRate = 20;
 
     private static final String[] imagePaths =
-            {"RunningFloor_1.png", "RunningFloor_2.png", "RunningFloor_3.png", "RunningFloor_4.png"};
+            {"floor/RunningFloor_1.png", "floor/RunningFloor_2.png", "floor/RunningFloor_3.png", "floor/RunningFloor_4.png"};
     private boolean rotateDirection; // 轉動的方向 順時針or逆時針
     // 不同轉動方向，不同的選圖模式
     private static final int[] CHOOSING_MODE_CLOCKWISE = {0, 1, 2, 3};
@@ -44,8 +44,10 @@ public class RunningTrap implements Trap {
         }else { // 逆時針
             floor.setChoosingImagesMode(CHOOSING_MODE_COUNTERCLOCKWISE);
         }
+        // 設定基礎圖寬高
         floor.setDrawWidth(floor.getFloorImages().get(0).getWidth());
         floor.setDrawHeight(floor.getFloorImages().get(0).getHeight());
+        // 繪製動畫延遲
         floor.setDrawingDelay(3);
     }
 
