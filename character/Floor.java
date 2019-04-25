@@ -20,6 +20,10 @@ public class Floor extends GameObject {
     private boolean isTriggered; // 角色在階梯上，觸發機關
 
     private int drawingDelayCount, drawingDelay; // 繪製動畫延遲
+    //Fragment*******************************
+    private int fragmentState;
+    private int fragmentCount;
+    private int fragmentRemove = 20;
 
     // 目前未用到的建構子
     public Floor(int x, int y, int drawWidth, int drawHeight, String imagePath){
@@ -64,7 +68,21 @@ public class Floor extends GameObject {
             drawingDelayCount = 0;
         }
     }
-
+    //新增fragment********************
+    public int getFragmentState(){
+        return this.fragmentState;
+    }
+    public void setFragmentState(int state){
+        this.fragmentState = state;
+    }
+    public int getFragmentCount(){
+        //System.out.println(fragmentCount);
+        return this.fragmentCount; 
+    }
+    public int getFragmentRemove(){
+        return this.fragmentRemove; 
+    }
+    //***********************************
     public void isBeenTouched(Actor player){
         this.isTriggered = true;
         executeTrap(player);
@@ -111,6 +129,14 @@ public class Floor extends GameObject {
         }catch (ArrayIndexOutOfBoundsException e){
             g.drawImage(floorImages.get(choosingImagesMode[0]), x, y - floorImages.get(choosingImagesMode[0]).getHeight() + drawHeight, x + drawWidth, y + drawHeight, 0, 0, floorImages.get(choosingImagesMode[0]).getWidth(), floorImages.get(choosingImagesMode[0]).getHeight(), null);
         }
+        //新增fragment********************
+        if(fragmentState>0){
+            this.fragmentCount++;
+            if(this.fragmentCount>this.fragmentRemove){
+                this.fragmentCount = 0;
+            }
+        }
+        //***********************************
     }
 
     public BufferedImage getCurrentDrawingImage(){

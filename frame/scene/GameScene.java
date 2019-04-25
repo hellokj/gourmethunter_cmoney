@@ -26,7 +26,7 @@ public class GameScene extends Scene {
     public GameScene(MainPanel.GameStatusChangeListener gsChangeListener) {
         super(gsChangeListener);
         // 場景物件
-        background = new GameObject(0, 0, 500, 700, "background/EgyptBackground.png");
+        background = new GameObject(0, 0, 500, 700,"background/EgyptBackground.png");
         roof = new GameObject(0, 70, 500, 32, "background/Roof.png");
         player = new Actor(250, 100, 32, 32);
         hungerBack = new GameObject(100, 30, 100, 20, "background/Hunger.png");
@@ -40,6 +40,12 @@ public class GameScene extends Scene {
         floors.add(new Floor(200 - 64, 400, TrapGenerator.getInstance().genSpecificTrap(1)));
         floors.add(new Floor(200 - 64 - 64, 400, TrapGenerator.getInstance().genSpecificTrap(4)));
         floors.add(new Floor(200 - 64 - 64 - 64, 500, TrapGenerator.getInstance().genSpecificTrap(4)));
+        floors.add(new Floor(268 , 350, TrapGenerator.getInstance().genSpecificTrap(5)));
+        floors.add(new Floor(284 , 350, TrapGenerator.getInstance().genSpecificTrap(5)));
+        floors.add(new Floor(300 , 350, TrapGenerator.getInstance().genSpecificTrap(5)));
+        floors.add(new Floor(316 , 350, TrapGenerator.getInstance().genSpecificTrap(5)));
+        floors.add(new Floor(332 , 350, TrapGenerator.getInstance().genSpecificTrap(5)));
+        floors.add(new Floor(348 , 350, TrapGenerator.getInstance().genSpecificTrap(5)));
     }
 
     @Override
@@ -84,6 +90,10 @@ public class GameScene extends Scene {
                 if (checkTopBoundary(floors.get(i))){
                     floors.remove(i);
                 }
+                //System.out.println(floors.get(i).getFragmentCount());
+                if(floors.get(i).getFragmentCount()==floors.get(i).getFragmentRemove()){
+                    floors.remove(i);
+                }
             }
 
             // 每次都要更新此次座標
@@ -123,8 +133,8 @@ public class GameScene extends Scene {
         player.paint(g);
     }
 
-    // 由場景來設定邊界判定
-    private void checkLeftRightBoundary(GameObject gameObject){
+    // 由場景來設定邊界判定 改設public static**********************
+    public static void checkLeftRightBoundary(GameObject gameObject){
         if (gameObject.getLeft() > GameFrame.FRAME_WIDTH){
             gameObject.setX(0);
         }

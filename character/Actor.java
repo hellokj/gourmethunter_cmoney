@@ -2,6 +2,7 @@ package character;
 
 import character.food.Food;
 import frame.scene.GameScene;
+import frame.scene.MenuScene;
 import util.ResourcesManager;
 
 import java.awt.*;
@@ -37,6 +38,8 @@ public class Actor extends GameObject{
 
     // delay
     private int stayDelayCount, stayDelay;
+    // jump delay***************************
+    private int jumpCount = 20;
 
     public Actor(int x, int y, int drawWidth, int drawHeight){
         super(x, y, drawWidth, drawHeight);
@@ -71,19 +74,35 @@ public class Actor extends GameObject{
         this.x = 250;
         this.y = 100;
     }
-
+    
+    //MenuScane walk*****************
+    public void walk(){
+        x += speedX;
+        setBoundary(); 
+    }
+    //MenuScane jump*****************
+    public void jump(){
+        jumpCount--;
+        this.y -= jumpCount;
+        setBoundary();
+        if(jumpCount==8){
+            jumpCount = 20;
+            MenuScene.setJumpState(0);
+            
+        }
+    }
     @Override
     public void update(){
         // 每經過一定延遲，增加飢餓值
-        if (hungerDelayCount++ == hungerDelay){
-            if (this.hunger + 5 >= 100){
-                this.hunger = 100;
-                this.die();
-            }else {
-                this.hunger += 5;
-            }
-            hungerDelayCount = 0;
-        }
+//        if (hungerDelayCount++ == hungerDelay){
+//            if (this.hunger + 5 >= 100){
+//                this.hunger = 100;
+//                this.die();
+//            }else {
+//                this.hunger += 5;
+//            }
+//            hungerDelayCount = 0;
+//        }
         if (!isOnFloor){
             speedY += GameScene.GRAVITY;
         }
