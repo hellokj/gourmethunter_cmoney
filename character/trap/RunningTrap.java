@@ -22,11 +22,11 @@ public class RunningTrap implements Trap {
         }else {
             rotateDirection = false; // 逆時針
         }
-        // 預設為轉速0.2
+        // 預設為轉速2
         this.rotateSpeed = 2;
     }
 
-    public RunningTrap(int rotateSpeed){
+    public RunningTrap(float rotateSpeed){
         this();
         // 也可以自行設定轉速
         this.rotateSpeed = rotateSpeed;
@@ -53,6 +53,41 @@ public class RunningTrap implements Trap {
 
     @Override
     public void execute(Actor player, Floor floor) {
-        // 待修改
+        if (floor.isTriggered()){ // 觸發
+            if (rotateDirection){ // 順時針
+                if (player.getDirection() == Actor.MOVE_RIGHT){
+                    if (player.getSpeedX() != player.getMaxSpeed()){
+                        player.setSpeedX(player.getSpeedX() + player.getAcceleration() + rotateSpeed);
+                    }else {
+                        player.setSpeedX(player.getMaxSpeed() + rotateSpeed);
+                    }
+                }else if (player.getDirection() == Actor.MOVE_LEFT){
+                    if (player.getSpeedX() != rotateSpeed){
+                        player.setSpeedX(player.getSpeedX() + (rotateSpeed - player.getAcceleration()));
+                    }else {
+                        player.setSpeedX(rotateSpeed);
+                    }
+                }
+            }else { // 逆時針
+                if (player.getDirection() == Actor.MOVE_RIGHT){
+                    if (player.getSpeedX() != -rotateSpeed){
+                        player.setSpeedX(player.getSpeedX() - (rotateSpeed - player.getAcceleration()));
+                    }else {
+                        player.setSpeedX(-rotateSpeed);
+                    }
+                }else if (player.getDirection() == Actor.MOVE_LEFT){
+                    if (player.getSpeedX() != -player.getMaxSpeed()){
+                        player.setSpeedX(player.getSpeedX() - player.getAcceleration() - rotateSpeed);
+                    }else {
+                        player.setSpeedX(-player.getMaxSpeed() - rotateSpeed);
+                    }
+                }
+            }
+        }
+//        if (rotateDirection){
+//            player.setX(player.getX() + (int)rotateSpeed);
+//        }else {
+//            player.setX(player.getX() - (int)rotateSpeed);
+//        }
     }
 }

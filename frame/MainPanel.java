@@ -1,5 +1,6 @@
 package frame;
 
+import character.GameObject;
 import frame.scene.*;
 
 import javax.swing.*;
@@ -13,6 +14,7 @@ public class MainPanel extends javax.swing.JPanel {
     public static final int GAME_SCENE = 1;
     public static final int LEADER_BOARD_SCENE = 2;
     public static final int END_SCENE = 3;
+    public static final int GAME_OVER_SCENE = 4;
 
     public interface GameStatusChangeListener{
         void changeScene(int sceneId);
@@ -61,6 +63,16 @@ public class MainPanel extends javax.swing.JPanel {
         this.setFocusable(true);
     }
 
+    // 由場景來設定邊界判定
+    public static void checkLeftRightBoundary(GameObject gameObject){
+        if (gameObject.getLeft() > GameFrame.FRAME_WIDTH){
+            gameObject.setX(0);
+        }
+        if (gameObject.getRight() < 0){
+            gameObject.setX(GameFrame.FRAME_WIDTH - gameObject.getDrawWidth());
+        }
+    }
+
     private frame.scene.Scene genSceneById(int id) {
         switch (id){
             case MENU_SCENE:
@@ -71,6 +83,8 @@ public class MainPanel extends javax.swing.JPanel {
                 return new LeaderBoardScene(gsChangeListener);
             case END_SCENE:
                 return new EndScene(gsChangeListener);
+            case GAME_OVER_SCENE:
+                return new GameOverScene(gsChangeListener);
         }
         return null;
     }

@@ -2,7 +2,11 @@ package character.trap;
 
 import character.Actor;
 import character.Floor;
+import util.PainterManager;
 import util.ResourcesManager;
+
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class SpringTrap implements Trap {
     public static final int generationRate = 25;

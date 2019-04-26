@@ -16,7 +16,9 @@ public class GameFrame{
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.add(mp);
 
+        System.out.println(mainFrame.getContentPane().getHeight() + " " + mainFrame.getContentPane().getWidth());
         mainFrame.setVisible(true);
+        System.out.println(mainFrame.getContentPane().getHeight() + " " + mainFrame.getContentPane().getWidth());
 
         Timer t1 = new Timer(20, new ActionListener() {
             @Override

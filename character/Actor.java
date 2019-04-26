@@ -2,7 +2,7 @@ package character;
 
 import character.food.Food;
 import frame.scene.GameScene;
-import frame.scene.MenuScene;
+import frame.scene.Scene;
 import util.ResourcesManager;
 
 import java.awt.*;
@@ -21,24 +21,27 @@ public class Actor extends GameObject{
     private static BufferedImage imageSlim = ResourcesManager.getInstance().getImage("actor/skeletona.png");
 
     // 身材速度上限
-    public static final int MAX_SPEED_FAT = 10;
-    public static final int MAX_SPEED_SLIM = 20;
+    private static final int MAX_SPEED_FAT = 10;
+    private static final int MAX_SPEED_SLIM = 15;
+    // 身材持續加速度
+    private static final float ACCELERATION_FAT = 0.3f;
+    private static final float ACCELERATION_SLIM = 0.5f;
     // 變換方向初速度
-    private static int CHANGE_DIRECTION_INITIAL_SPEED = 2;
+    private static int CHANGE_DIRECTION_INITIAL_SPEED = 3;
 
     // 角色現在狀態
     private boolean state; // 胖瘦狀態 true:肥 false:瘦
-    private boolean isOnFloor; // 當前是否有在階梯上
+    private boolean isOn; // 當前是否有在階梯上
+    private boolean canJump;
     private int direction; // 角色方向
     private boolean dieState; // 死亡狀態
 
-    // 每經過100次延刷新，讓飢餓值上升
+    // 每經過100次刷新，讓飢餓值上升
     private int hungerDelayCount, hungerDelay = 20;
     private int hunger; // 飢餓程度
 
     // delay
     private int stayDelayCount, stayDelay;
-    // jump delay***************************
     private int jumpCount = 20;
 
     public Actor(int x, int y, int drawWidth, int drawHeight){
@@ -46,6 +49,7 @@ public class Actor extends GameObject{
         this.direction = MOVE_RIGHT;
         this.hunger = 0;
         this.state = true;
+        this.canJump = true;
         this.image = imageFat;
     }
 
@@ -63,7 +67,26 @@ public class Actor extends GameObject{
         return this.dieState;
     }
     public void die(){
+        this.direction = MOVE_DOWN;
         this.dieState = true;
+    }
+    public boolean canJump() {
+        return canJump;
+    }
+    public void setCanJump(boolean canJump) {
+        this.canJump = canJump;
+    }
+    public float getAcceleration(){
+        if (state){
+            return ACCELERATION_FAT;
+        }
+        return ACCELERATION_SLIM;
+    }
+    public int getMaxSpeed(){
+        if (state){
+            return MAX_SPEED_FAT;
+        }
+        return MAX_SPEED_SLIM;
     }
 
     public void reset(){
@@ -74,42 +97,55 @@ public class Actor extends GameObject{
         this.x = 250;
         this.y = 100;
     }
-    
-    //MenuScane walk*****************
-    public void walk(){
-        x += speedX;
-        setBoundary(); 
-    }
-    //MenuScane jump*****************
+
     public void jump(){
-        jumpCount--;
-        this.y -= jumpCount;
-        setBoundary();
-        if(jumpCount==8){
-            jumpCount = 20;
-            MenuScene.setJumpState(0);
-            
-        }
+        int jumpSpeed = 14;
+        speedY -= jumpSpeed;
+        this.canJump = false;
     }
+
     @Override
     public void update(){
         // 每經過一定延遲，增加飢餓值
-//        if (hungerDelayCount++ == hungerDelay){
-//            if (this.hunger + 5 >= 100){
-//                this.hunger = 100;
-//                this.die();
-//            }else {
-//                this.hunger += 5;
-//            }
-//            hungerDelayCount = 0;
-//        }
-        if (!isOnFloor){
-            speedY += GameScene.GRAVITY;
+        if (!isOn){
+            speedY += Scene.GRAVITY;
         }
+        checkMaxSpeed();
         x += speedX;
         y += speedY;
         checkHunger();
-        setBoundary(); // 更新完座標後，設定邊界
+        setBoundary();
+    }
+
+    private void checkMaxSpeed() {
+        // 確認速度上限
+        if (state){
+            if (speedX >= MAX_SPEED_FAT){
+                speedX = MAX_SPEED_FAT;
+            }
+            if (speedX <= -MAX_SPEED_FAT){
+                speedX = -MAX_SPEED_FAT;
+            }
+        }else {
+            if (speedX >= MAX_SPEED_SLIM){
+                speedX = MAX_SPEED_SLIM;
+            }
+            if (speedX <= -MAX_SPEED_SLIM){
+                speedX = -MAX_SPEED_SLIM;
+            }
+        }
+    }
+
+    public void hunger() {
+        if (hungerDelayCount++ == hungerDelay){
+            if (this.hunger + 5 >= 100){
+                this.hunger = 100;
+                this.die();
+            }else {
+                this.hunger += 5; // 延遲到了，增加飢餓值
+            }
+            hungerDelayCount = 0;
+        }
     }
 
     // 原地踏步
@@ -136,47 +172,33 @@ public class Actor extends GameObject{
                     speedX = -CHANGE_DIRECTION_INITIAL_SPEED;
 //                    speedX = 0;
                     break;
+                case MOVE_UP:
+                    imageOffsetY = 3;
+                    break;
+                case MOVE_DOWN:
+                    imageOffsetY = 0;
+                    break;
             }
         }
         // 變換方向
         this.direction = direction;
-        // 設定速度上限
-        if (state){
-            if (speedX >= MAX_SPEED_FAT){
-                speedX = MAX_SPEED_FAT;
-                return;
-            }
-            if (speedX <= -MAX_SPEED_FAT){
-                speedX = -MAX_SPEED_FAT;
-                return;
-            }
-        }else {
-            if (speedX >= MAX_SPEED_SLIM){
-                speedX = MAX_SPEED_SLIM;
-                return;
-            }
-            if (speedX <= -MAX_SPEED_SLIM){
-                speedX = -MAX_SPEED_SLIM;
-                return;
-            }
-        }
         // 持續按壓 加速度
         if (state){
             switch (direction){
                 case MOVE_RIGHT:
-                    speedX += 0.3f;
+                    speedX += ACCELERATION_FAT;
                     break;
                 case MOVE_LEFT:
-                    speedX -= 0.3f;
+                    speedX -= ACCELERATION_FAT;
                     break;
             }
         }else {
             switch (direction){
                 case MOVE_RIGHT:
-                    speedX += 0.5f;
+                    speedX += ACCELERATION_SLIM;
                     break;
                 case MOVE_LEFT:
-                    speedX -= 0.5f;
+                    speedX -= ACCELERATION_SLIM;
                     break;
             }
         }
@@ -212,18 +234,30 @@ public class Actor extends GameObject{
         }
     }
 
+    public boolean checkOnObject(GameObject gameObject){
+        // 於物體上
+        if(this.bottom + speedY > gameObject.top){
+            y = gameObject.top - drawHeight;
+            speedY = gameObject.speedY;
+            isOn = true;
+            return true;
+        }
+        isOn = false;
+        return false;
+    }
+
     public boolean checkOnFloor(Floor floor){
         // 確認已完全低於此階梯
         // 確認完全走出階梯範圍
         if(this.left > floor.right || this.right < floor.left || this.bottom > floor.bottom){
-            isOnFloor = false;
+            isOn = false;
             return false;
         }
         // 於階梯上
         if(this.bottom + speedY > floor.top){
             y = floor.top - drawHeight; // 需修改
             speedY = floor.speedY;
-            isOnFloor = true;
+            isOn = true;
             // 人物去碰觸地板，將地板狀態設為被接觸，並由地板觸發機關
             floor.isBeenTouched(this);
             // 吃食物機制
@@ -232,7 +266,7 @@ public class Actor extends GameObject{
             }
             return true;
         }
-        isOnFloor = false;
+        isOn = false;
         return false;
     }
 
@@ -252,17 +286,22 @@ public class Actor extends GameObject{
         return false;
     }
 
+    // 人物做動作
+    public int dance(){
+        return direction;
+    }
+
 
     @Override
     public void paint(Graphics g){
         // 人物飢餓值達到一定程度
         // 切換角色圖、速度上升等
-        if (state){
+        if (state){ // 小胖狀態
             this.drawWidth = this.drawHeight = 32;
             g.drawImage(image, x, y, x + drawWidth, y + drawHeight,
                     direction*4* drawWidth + drawWidth*imageOffsetX, imageOffsetY,
                     direction*4* drawWidth + drawWidth*imageOffsetX + drawWidth, imageOffsetY + drawHeight, null);
-        }else {
+        }else { // 骷髏狀態
             this.drawWidth = 32;
             this.drawHeight = 64;
             g.drawImage(image, x, y, x + drawWidth, y + drawHeight,

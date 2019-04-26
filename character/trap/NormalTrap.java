@@ -9,7 +9,7 @@ import util.ResourcesManager;
 import java.awt.image.BufferedImage;
 
 public class NormalTrap implements Trap {
-    private static String imagePath = "floor/Floor1.png";
+    private static String imagePath = "floor/Floor.png";
     private static BufferedImage image = ResourcesManager.getInstance().getImage(imagePath);
     private static final int[] choosingImagesMode = {0};
 

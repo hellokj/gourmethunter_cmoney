@@ -26,8 +26,13 @@ public class StoneTrap implements Trap {
         floor.setDrawingDelay(20);
     }
 
+
+    private int executeDelayCount, executeDelay = 50;
     @Override
     public void execute(Actor player, Floor floor) {
-        // 扣血機制
+        if (++executeDelayCount % executeDelay == 0){
+            // 扣血機制
+            player.setHunger(player.getHunger() + 3);
+        }
     }
 }
