@@ -15,11 +15,13 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 public class GameScene extends Scene {
-    private GameObject background, roof, hungerCount, hungerBack;
+    private GameObject background_0, background_1, background_end, roof, hungerCount, hungerBack;
+    private GameObject fire_left, fire_right;
     private Actor player;
     private ArrayList<Floor> floors;
 
-    private int minute, second0, second1; // 印出時間
+    private int time;
+    private int minute, second; // 印出時間
     private String colon; // 冒號
     private int timeCount; // 時間刷新delay
 
@@ -29,17 +31,19 @@ public class GameScene extends Scene {
     public GameScene(MainPanel.GameStatusChangeListener gsChangeListener) {
         super(gsChangeListener);
         // 場景物件
-        background = new GameObject(0, -22, 500, 700, "background/EgyptBackground.png");
+        background_0 = new GameObject(0, -22, 500, 700, "background/EgyptBackground_0.png");
+        background_1 = new GameObject(0, -22 + 700, 500, 700, "background/EgyptBackground_0.png");
+        background_end = new GameObject(0, -22+700, 500, 700, "background/EgyptBackground_1.png");
+        fire_left = new GameObject(0, 10, 100, 100, "background/Fire.png");
+        fire_right = new GameObject(490, 10, 100, 100, "background/Fire.png");
         roof = new GameObject(0, 70, 500, 32, "background/Roof.png");
         player = new Actor(250, 100, 32, 32);
         // 飢餓值
         hungerBack = new GameObject(100, 30, 100, 20, "background/Hunger.png");
         hungerCount = new GameObject(100, 30, 100, 20, "background/HungerCount.png");
         // 時間相關
-        minute = 1;
+        time = 60;
         colon = " : ";
-        second0 = 0;
-        second1 = 9;
         // 測試用地板
         floors = new ArrayList<>();
         floors.add(new Floor(200, 500, TrapGenerator.getInstance().genSpecificTrap(0)));
@@ -133,11 +137,15 @@ public class GameScene extends Scene {
                 }
             }
         }
+        updateBackgroundImage();
     }
 
     @Override
     public void paint(Graphics g) {
-        background.paint(g);
+        background_0.paint(g);
+        background_1.paint(g);
+        fire_left.paint(g);
+        fire_right.paint(g);
         roof.paint(g);
         hungerBack.paint(g);
         hungerCount.paint(g);
@@ -155,8 +163,7 @@ public class GameScene extends Scene {
         int msgAscent = fm.getAscent();
         g.drawString(String.valueOf(minute), 300, 30);
         g.drawString(colon, 300 + msgWidth, 30);
-        g.drawString(String.valueOf(second0), 300 + 2*msgWidth, 30);
-        g.drawString(String.valueOf(second1), 300 + 3*msgWidth, 30);
+        g.drawString(String.valueOf(second), 300 + 2*msgWidth, 30);
     }
 
     // 比天花板高就消失
@@ -164,10 +171,29 @@ public class GameScene extends Scene {
         return gameObject.getTop() < this.roof.getBottom();
     }
 
+    // 更新背景圖
+    private void updateBackgroundImage(){
+        if (background_0.getBottom() < 0){
+            background_0 = new GameObject(0, -22 + 700, 500, 700, "background/EgyptBackground_0.png");
+        }
+        if (background_1.getBottom() < 0){
+            background_1 = new GameObject(0, -22 + 700, 500, 700, "background/EgyptBackground_0.png");
+        }
+        background_0.setY(background_0.getY() - 3);
+        background_1.setY(background_1.getY() - 3);
+//        if (time == 20){
+//            background_end.setY(background_end.getY() - 1);
+//        }
+        background_0.setBoundary();
+        background_1.setBoundary();
+    }
+
     // 更新時間
     private void updateTime(){
+        minute = time / 60;
+        second = time % 60;
         if(++timeCount % 40 == 0){
-            second1 -= 1;
+            time -= 1;
         }
     }
 }
