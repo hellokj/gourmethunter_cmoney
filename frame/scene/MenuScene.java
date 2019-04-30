@@ -5,22 +5,25 @@ import character.Button;
 import character.GameObject;
 import frame.MainPanel;
 
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class MenuScene extends Scene{
-    private GameObject background, logo, road;
+    private GameObject background, logo, road, hole_top, hole;
     private Button buttonStart, buttonLeader;
     private Actor player;
-    private int count; // 碰觸按鈕延遲
+    private int countS,countL; // 碰觸按鈕延遲
 
     public MenuScene(MainPanel.GameStatusChangeListener gsChangeListener){
         super(gsChangeListener);
         this.background = new GameObject(0,-22,500, 700, "background/MenuBackground.png");
         this.logo = new GameObject(50,60,400,200,"background/Logo.png");
         this.road = new GameObject(0, 654, 500, 10, "floor/Floor.png");
+        this.hole_top = new GameObject(300,600,64,32,"background/hole_top.png");
+        this.hole = new GameObject(300,600,64,32,"background/hole.png");
         this.buttonStart = new Button(50,375, 150, 100, "button/Button_start.png");
         this.buttonLeader = new Button(280,375,150,100,"button/Button_LB.png");
         this.player = new Actor(250, 622, 32, 32);
@@ -72,13 +75,25 @@ public class MenuScene extends Scene{
         // 按鈕碰撞換圖
         if(buttonStart.checkCollision(player)){
             buttonStart.setImageOffsetX(1);
-            if (count++ == 1){ // 一個延遲後切換場景
+            if (countS++ == 1){ // 一個延遲後切換場景
+                hole_top.setX(350);
+                countS = 0;
                 // 切換至遊戲場景
+                //gsChangeListener.changeScene(MainPanel.GAME_SCENE);
+            }
+        }
+        if(hole_top.getX()==350&&hole.checkCollision(player)){
+            if (countS++ == 6){
                 gsChangeListener.changeScene(MainPanel.GAME_SCENE);
+                countS = 0;
             }
         }
         if(buttonLeader.checkCollision(player)){
             buttonLeader.setImageOffsetX(1);
+            if (countL++ == 20){ // 一個延遲後切換場景
+                gsChangeListener.changeScene(MainPanel.LEADER_BOARD_SCENE);
+                countL = 0;
+            }
             // 切換至排行場景
             // ...待補
         }
@@ -91,6 +106,8 @@ public class MenuScene extends Scene{
         buttonStart.paint(g);
         buttonLeader.paint(g);
         logo.paint(g);
+        hole.paint(g);
+        hole_top.paint(g);
         player.paint(g);
     }
 }

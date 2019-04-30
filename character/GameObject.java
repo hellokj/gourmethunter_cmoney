@@ -129,6 +129,9 @@ public class GameObject {
     public void setY(int y) {
         this.y = y;
     }
+    public BufferedImage getImage(){
+        return this.image;
+    }
     public void setImage(BufferedImage image){
         this.image = image;
     }
@@ -146,6 +149,6 @@ public class GameObject {
     }
 
     public void paint(Graphics g){
-        g.drawImage(image, x, y, x + drawWidth, y + drawHeight, 0, 0, image.getWidth(), image.getHeight(), null);
+        g.drawImage(image, x, y, x + drawWidth, y + drawHeight, imageOffsetX*image.getWidth(), 0,image.getWidth(), image.getHeight(), null);
     }
 }

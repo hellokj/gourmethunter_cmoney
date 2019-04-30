@@ -33,7 +33,7 @@ public class MainPanel extends javax.swing.JPanel {
             }
         };
 
-        changeCurrentScene(genSceneById(MENU_SCENE));
+        changeCurrentScene(genSceneById(LEADER_BOARD_SCENE));
 
         // delay 25ms
         Timer t1 = new Timer(25, new ActionListener() {
