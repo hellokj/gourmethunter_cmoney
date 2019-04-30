@@ -6,10 +6,10 @@ public class TrapGenerator {
     private static final int TRAP_DANCING = 2;
     private static final int TRAP_STONE = 3;
     private static final int TRAP_SPRING = 4;
-    private static final int TRAP_FRAGMENT = 5;
+//    private static final int TRAP_FRAGMENT = 5;
     private static final int[] TRAP = {TRAP_NORMAL, TRAP_RUNNING,
                     TRAP_DANCING, TRAP_STONE,
-                    TRAP_SPRING, TRAP_FRAGMENT};
+                    TRAP_SPRING};
 
     private static TrapGenerator trapGenerator;
 
@@ -33,8 +33,8 @@ public class TrapGenerator {
                 return new StoneTrap();
             case TRAP_SPRING:
                 return new SpringTrap();
-            case TRAP_FRAGMENT:
-                return new FragmentTrap();
+//            case TRAP_FRAGMENT:
+//                return new FragmentTrap();
         }
         return null;
     }
@@ -67,10 +67,12 @@ public class TrapGenerator {
                     return new SpringTrap();
                 }
                 break;
-            case TRAP_FRAGMENT:
-                if(rate > FragmentTrap.generationRate){
-                    return new FragmentTrap();
-                }
+//            case TRAP_FRAGMENT:
+//                if(rate > FragmentTrap.generationRate){
+//                    return new FragmentTrap();
+//                }
+//                break;
+            default:
                 break;
         }
         // 若生成失敗，固定生成基礎地板

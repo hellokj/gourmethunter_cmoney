@@ -2,6 +2,10 @@ package character.food;
 
 import character.Floor;
 import character.GameObject;
+import util.ResourcesManager;
+
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Food extends GameObject {
     private Floor floor; // 在的那塊地板
@@ -9,17 +13,18 @@ public class Food extends GameObject {
     private int heal; // 回復的飢餓值
     private int offset; // 在階梯上位置
 
-    public Food(int foodCode, Floor floor, int offset){
-        super(floor.getX() + 24*offset, floor.getY() - 24, 24, 24, "food/farm_product"+ foodCode +".png");
+    public Food(Floor floor, int offset, BufferedImage image){
+        super(floor.getX() + 24*offset, floor.getY() - 24, 24, 24);
         this.offset = offset;
         this.isEaten = false;
         this.floor = floor;
         this.heal = (int)(Math.random()*100);
+        this.image = image;
     }
 
     @Override
     public void update(){
-        this.x = floor.getX() + 24*offset;
+        this.x = floor.getX() + 24 * offset;
         this.y = floor.getY() - 24;
         this.setBoundary();
     }

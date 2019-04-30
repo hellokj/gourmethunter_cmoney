@@ -2,19 +2,15 @@ package character.trap;
 
 import character.Actor;
 import character.Floor;
-import util.PainterManager;
 import util.ResourcesManager;
-
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class SpringTrap implements Trap {
     public static final int generationRate = 25;
 
     private static final String[] imagePaths =
             {"floor/SpringFloor_0.png", "floor/SpringFloor_1.png", "floor/SpringFloor_2.png", "floor/SpringFloor_3.png"};
-    private static final int[] choosingImagesMode = {1, 2, 3, 3, 3, 2};
-    private static final int[] choosingImagesModeBase = {1};
+    private static final int[] CHOOSING_IMAGES_MODE = {1, 2, 3, 3, 3, 2};
+    public static final int[] CHOOSING_IMAGES_MODE_BASE = {1};
 
     @Override
     public void setFloorState(Floor floor) {
@@ -25,7 +21,7 @@ public class SpringTrap implements Trap {
         floor.setDrawWidth(ResourcesManager.getInstance().getImage(imagePaths[0]).getWidth());
         floor.setDrawHeight(ResourcesManager.getInstance().getImage(imagePaths[0]).getHeight());
         // 設定選圖模式
-        floor.setChoosingImagesMode(choosingImagesModeBase);
+        floor.setChoosingImagesMode(CHOOSING_IMAGES_MODE_BASE);
         // 預計用來設定未被觸發時的狀態圖(尚需修改)
         // 還未能只在碰觸時修改
         floor.setImage(ResourcesManager.getInstance().getImage(imagePaths[0]));
@@ -38,7 +34,7 @@ public class SpringTrap implements Trap {
         // 彈飛初速度
         int bounceSpeed = -15;
         if (floor.isTriggered()){
-            floor.setChoosingImagesMode(choosingImagesMode);
+            floor.setChoosingImagesMode(CHOOSING_IMAGES_MODE);
             // 彈簧機制
             // 依照現在畫的圖的高度做偏移
             player.setY(floor.getY() + floor.getDrawHeight() - floor.getCurrentDrawingImage().getHeight() - player.getDrawHeight());

@@ -20,6 +20,13 @@ public class GameOverScene extends Scene {
     @Override
     public KeyListener genKeyListener() {
         return new KeyAdapter() {
+
+            @Override
+            public void keyPressed(KeyEvent e){
+                if (e.getKeyCode() == KeyEvent.VK_R){
+                    gsChangeListener.changeScene(MainPanel.GAME_SCENE);
+                }
+            }
         };
     }
 

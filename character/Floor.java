@@ -2,7 +2,7 @@ package character;
 
 
 import character.food.Food;
-import character.trap.NormalTrap;
+import character.trap.SpringTrap;
 import character.trap.Trap;
 
 import java.awt.*;
@@ -28,7 +28,7 @@ public class Floor extends GameObject {
 
     public Floor(int x, int y, Trap trapFunction){
         super(x, y);
-        this.speedY = -0f;
+        this.speedY = -0.1f;
 //        this.speedY = -(float)(Math.random()*10);
         this.trapFunction = trapFunction;
         this.floorImages = new ArrayList<>();
@@ -54,11 +54,20 @@ public class Floor extends GameObject {
     public Food getFood(){
         return this.food;
     }
+    public Trap getTrapFunction(){
+        return this.trapFunction;
+    }
 
     // 未被觸發的動畫選圖
     // 某些地板被觸發才播動畫，可能不適用此方法
     public void stay(){
         if (drawingDelayCount++ == drawingDelay){
+            // 超爛做法(只針對彈簧畫圖模式更動)
+            if (this.trapFunction instanceof SpringTrap){
+                if(choosingImagesCounter == 6){
+                    this.choosingImagesMode = SpringTrap.CHOOSING_IMAGES_MODE_BASE;
+                }
+            }
             this.choosingImagesCounter = choosingImagesCounter % choosingImagesMode.length;
             this.choosingImagesCounter++;
             drawingDelayCount = 0;

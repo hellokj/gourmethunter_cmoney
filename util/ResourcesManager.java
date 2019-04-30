@@ -24,6 +24,9 @@ public class ResourcesManager {
         images = new BufferedImage[2];
         paths = new String[2];
         count = 0;
+        for (int i = 1; i <= 33; i++) {
+            getImage("food/farm_product"+ i +".png");
+        }
     }
 
     public BufferedImage getImage(String path){

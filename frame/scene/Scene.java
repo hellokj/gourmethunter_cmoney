@@ -8,7 +8,7 @@ import java.awt.event.KeyListener;
 
 public abstract class Scene {
     public static final float GRAVITY = 0.5f;
-    public static final float FRICTION = 0.1f;
+    public static final float FRICTION = 0.2f;
     MainPanel.GameStatusChangeListener gsChangeListener;
 
     public Scene(MainPanel.GameStatusChangeListener gsChangeListener){

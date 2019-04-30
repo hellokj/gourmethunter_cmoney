@@ -8,7 +8,7 @@ import util.ResourcesManager;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Actor extends GameObject{
+public class Actor extends AnimationGameObject{
     public static final int MOVE_DOWN = 0;
     public static final int MOVE_RIGHT = 1;
     public static final int MOVE_UP = 2;
@@ -32,7 +32,8 @@ public class Actor extends GameObject{
     // 角色現在狀態
     private boolean state; // 胖瘦狀態 true:肥 false:瘦
     private boolean isOn; // 當前是否有在階梯上
-    private boolean canJump;
+    private boolean canJump; // 可以跳
+    private boolean invincible; // 無敵時間
     private int direction; // 角色方向
     private boolean dieState; // 死亡狀態
 
@@ -42,6 +43,7 @@ public class Actor extends GameObject{
 
     // delay
     private int stayDelayCount, stayDelay;
+    private int invincibleDelayCount, invicibleDelay = 10;
     private int jumpCount = 20;
 
     public Actor(int x, int y, int drawWidth, int drawHeight){
@@ -115,6 +117,10 @@ public class Actor extends GameObject{
         y += speedY;
         checkHunger();
         setBoundary();
+        if (invincibleDelayCount++ == invicibleDelay){
+            invincibleDelayCount = 0;
+            invincible = false;
+        }
     }
 
     private void checkMaxSpeed() {
@@ -222,15 +228,19 @@ public class Actor extends GameObject{
 
     // 碰到天花板
     public void touchRoof(){
-        this.speedX = 0;
-        this.speedY = 0;
-        this.direction = MOVE_DOWN;
-        this.y += 30;
-        if (this.hunger + 20 >= 100){
-            this.hunger = 100;
-            this.die();
-        }else {
-            this.hunger += 20;
+        if (!this.invincible){
+            this.speedX = 0;
+            this.speedY = 0;
+            this.direction = MOVE_DOWN;
+            this.invincible = true;
+            this.y += 30;
+            this.setBoundary();
+            if (this.hunger + 20 >= 100){
+                this.hunger = 100;
+                this.die();
+            }else {
+                this.hunger += 20;
+            }
         }
     }
 
