@@ -5,12 +5,13 @@ import util.ResourcesManager;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class GameObject {
+public class GameObject implements Cloneable{
     protected int x, y; // 圖片座標
     protected int top, bottom, left, right; // 圖片本身邊界
     // 適用於 不同圖
     protected int drawWidth, drawHeight; // 畫出來的長寬
     // 適用於 同張圖
+    protected int imageWidth, imageHeight;
     protected int imageOffsetX, imageOffsetY; // 選擇圖片 偏移量
     protected BufferedImage image; // 圖片
 
@@ -37,6 +38,12 @@ public class GameObject {
     public GameObject(int x, int y, int drawWidth, int drawHeight, String imageName){
         this(x, y, drawWidth, drawHeight);
         this.image = ResourcesManager.getInstance().getImage(imageName);
+    }
+
+    public GameObject(int x, int y, int drawWidth, int drawHeight, int imageWidth, int imageHeight, String imageName){
+        this(x, y, drawWidth, drawHeight, imageName);
+        this.imageWidth = imageWidth;
+        this.imageHeight = imageHeight;
     }
 
     // 更新每次座標

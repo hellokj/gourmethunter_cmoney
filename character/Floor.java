@@ -28,7 +28,7 @@ public class Floor extends GameObject {
 
     public Floor(int x, int y, Trap trapFunction){
         super(x, y);
-        this.speedY = -0f;
+        this.speedY = -0.1f;
 //        this.speedY = -(float)(Math.random()*10);
         this.trapFunction = trapFunction;
         this.floorImages = new ArrayList<>();
@@ -53,6 +53,9 @@ public class Floor extends GameObject {
     }
     public Food getFood(){
         return this.food;
+    }
+    public Trap getTrapFunction(){
+        return this.trapFunction;
     }
 
     // 未被觸發的動畫選圖
