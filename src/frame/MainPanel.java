@@ -18,6 +18,7 @@ public class MainPanel extends javax.swing.JPanel {
     public static final int END_SCENE = 3;
     public static final int GAME_OVER_SCENE = 4;
     public static final int LEADER_BOARD_SCENE = 5;
+    public static final int MODE_SCENE = 6;
 
     public interface GameStatusChangeListener{
         void changeScene(int sceneId);
@@ -39,7 +40,7 @@ public class MainPanel extends javax.swing.JPanel {
         };
 
         scenes = new Scene[5];
-        changeCurrentScene(genSceneById(MENU_SCENE));
+        changeCurrentScene(genSceneById(MODE_SCENE));
 
         // delay 25 ms
         Timer t1 = new Timer(25, new ActionListener() {
@@ -93,6 +94,8 @@ public class MainPanel extends javax.swing.JPanel {
                 return new EndScene(gsChangeListener);
             case GAME_OVER_SCENE:
                 return new GameOverScene(gsChangeListener);
+            case MODE_SCENE:
+                return new ModeScene(gsChangeListener);
         }
         return null;
     }

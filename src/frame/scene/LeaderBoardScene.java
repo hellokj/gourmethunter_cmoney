@@ -30,7 +30,7 @@ public class LeaderBoardScene extends Scene {
         this.background = new GameObject(0,-22,500, 700, "background/MenuBackground.png");
         this.road = new GameObject(0, 644, 600, 44, "background/Road.png");
         this.paper = new GameObject(50,100,350,450, "background/Paper.png");
-        this.buttonBack = new Button(300,475, 150, 100, "button/Button_Back.png");
+        this.buttonBack = new Button(300,475, 150, 100, 150, 100, "button/Button_Back.png");
         this.player = new Actor(250, 622, 32, 32);
         this.serials = new ArrayList<>();
         this.names = new ArrayList<>();

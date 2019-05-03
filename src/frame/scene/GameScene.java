@@ -397,9 +397,9 @@ public class GameScene extends Scene {
     // 跳出選單
     private void menu(){
         isCalled = true;
-        button_resume = new Button(175, 150, 150, 100, "button/Button_Resume.png");
-        button_new_game = new Button(175, 300, 150, 100, "button/Button_NewGame.png");
-        button_menu = new Button(175, 450, 150, 100, "button/Button_Menu.png");
+        button_resume = new Button(175, 150, 150, 100, 150, 100, "button/Button_Resume.png");
+        button_new_game = new Button(175, 300, 150, 100, 150, 100, "button/Button_NewGame.png");
+        button_menu = new Button(175, 450, 150, 100, 150, 100, "button/Button_Menu.png");
         cursor = new GameObject(100, 150 + 25, 50, 50, 168, 140, "background/Cursor.png");
     }
 
