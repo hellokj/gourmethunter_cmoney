@@ -7,9 +7,10 @@ public class TrapGenerator {
     private static final int TRAP_STONE = 3;
     private static final int TRAP_SPRING = 4;
 //    private static final int TRAP_FRAGMENT = 5;
+    private static final int TRAP_FLASH = 5;
     private static final int[] TRAP = {TRAP_NORMAL, TRAP_RUNNING,
                     TRAP_DANCING, TRAP_STONE,
-                    TRAP_SPRING};
+                    TRAP_SPRING,TRAP_FLASH};
 
     private static TrapGenerator trapGenerator;
 
@@ -35,6 +36,8 @@ public class TrapGenerator {
                 return new SpringTrap();
 //            case TRAP_FRAGMENT:
 //                return new FragmentTrap();
+            case TRAP_FLASH:
+                return new FlashTrap();
         }
         return null;
     }
@@ -72,6 +75,11 @@ public class TrapGenerator {
 //                    return new FragmentTrap();
 //                }
 //                break;
+            case TRAP_FLASH:
+                if(rate > FlashTrap.generationRate){
+                    return new FlashTrap();
+                }
+                break;
             default:
                 break;
         }

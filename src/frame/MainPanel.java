@@ -40,7 +40,7 @@ public class MainPanel extends javax.swing.JPanel {
         };
 
         scenes = new Scene[5];
-        changeCurrentScene(genSceneById(MODE_SCENE));
+        changeCurrentScene(genSceneById(END_SCENE));
 
         // delay 25 ms
         Timer t1 = new Timer(25, new ActionListener() {

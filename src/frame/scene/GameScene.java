@@ -2,6 +2,7 @@ package frame.scene;
 
 import character.*;
 import character.Button;
+import character.trap.FlashTrap;
 import character.trap.TrapGenerator;
 import frame.GameFrame;
 import frame.MainPanel;
@@ -42,6 +43,8 @@ public class GameScene extends Scene {
 
     private int key; // 鍵盤輸入值
     private int count; // 死亡跳起計數器
+    
+    private int flashcount; //閃光延遲
 
     public GameScene(MainPanel.GameStatusChangeListener gsChangeListener) {
         super(gsChangeListener);
@@ -67,6 +70,7 @@ public class GameScene extends Scene {
         for (int i = 0; i < 9; i++) {
             floors.add(floorGenerator.genFloor(floors.get(i)));
         }
+
         isOver = false;
         isCalled = false;
         isPause = false;
@@ -273,7 +277,6 @@ public class GameScene extends Scene {
                 }
             }
         }
-
     }
 
     @Override
@@ -289,7 +292,7 @@ public class GameScene extends Scene {
         for (Floor floor : floors) {
             floor.paint(g);
         }
-
+        
         // 火把
 //        for (AnimationGameObject fire : fires_left){
 //            fire.paint(g);
@@ -302,6 +305,20 @@ public class GameScene extends Scene {
             endingGate.paint(g);
         }
         player.paint(g);
+        
+        //閃光開始
+        if(FlashTrap.getFlashState()){
+            flashcount++;
+        }//閃光持續
+        if(flashcount<15 && flashcount>0){
+           FlashTrap.getFlash().setCounter(flashcount-1);
+           //System.out.println("**"+flashcount);
+           FlashTrap.getFlash().paint(g);
+        }//閃光結束
+        else if(flashcount>=15){
+            FlashTrap.setFlashState(false);
+            flashcount = 0;
+        }
 
         if (isCalled){
             button_menu.paint(g);
