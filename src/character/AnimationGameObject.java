@@ -16,7 +16,16 @@ public class AnimationGameObject extends GameObject implements Cloneable{
         super(x, y, drawWidth, drawHeight);
         this.state = 0;
     }
-
+    
+    public void setMovingPattern(int[] moving){
+        this.MOVING_PATTERN = moving;
+    }
+    public void setStayDelay(int delay){
+        this.stayDelay = delay;
+    }
+    public void setimageOffsetX(int imageOffsetX){
+        this.imageOffsetX = imageOffsetX;
+    }
     // 原地踏步
     public void stay(){
         stayDelay = 8; // 設定原地踏步延遲機制

@@ -10,6 +10,9 @@ public class Button extends AnimationGameObject {
         super(x, y, drawWidth, drawHeight, imageWidth, imageHeight, imagePath);
         this.image = ResourcesManager.getInstance().getImage(imagePath);
     }
+    public void setimageOffsetX(int imageOffsetX){
+        this.imageOffsetX = imageOffsetX;
+    }
 
     @Override
     public void paint(Graphics g){

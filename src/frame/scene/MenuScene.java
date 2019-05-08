@@ -13,9 +13,9 @@ import java.awt.event.KeyListener;
 
 public class MenuScene extends Scene{
     private GameObject background, logo, road;
-    private Button buttonMode, buttonLeader, buttonExit;
+    private Button buttonMode, buttonLeader, buttonGuide;
     private Actor player;
-    private int countM,countL,countE; // 碰觸按鈕延遲
+    private int countM,countL,countG; // 碰觸按鈕延遲
 
     public MenuScene(MainPanel.GameStatusChangeListener gsChangeListener){
         super(gsChangeListener);
@@ -24,7 +24,7 @@ public class MenuScene extends Scene{
         this.road = new GameObject(0, 644, 600, 44, "background/Road.png");
         this.buttonMode = new Button(60,400, 100, 75, 150, 100, "button/Button_Mode.png");
         this.buttonLeader = new Button(190,400,100, 75, 150, 100,"button/Button_LB.png");
-        this.buttonExit = new Button(320,400,100, 75, 150, 100,"button/Button_Exit.png");
+        this.buttonGuide = new Button(320,400,100, 75, 150, 100,"button/Button_Guide.png");
         this.player = new Actor(250, 700, 32, 32);
     }
 
@@ -68,7 +68,7 @@ public class MenuScene extends Scene{
         // 設定按鈕圖片
         buttonMode.setImageOffsetX(0);
         buttonLeader.setImageOffsetX(0);
-        buttonExit.setImageOffsetX(0);
+        buttonGuide.setImageOffsetX(0);
         player.update();
 //        player.setBoundary(); // 更新完座標後，設定邊界
         player.stay();
@@ -88,11 +88,11 @@ public class MenuScene extends Scene{
                 countL = 0;
             }
         }
-        if(buttonExit.checkCollision(player)){
-            buttonExit.setImageOffsetX(1);
-            if (countE++ == 20){ // 一個延遲後切換場景
-                gsChangeListener.changeScene(MainPanel.LEADER_BOARD_SCENE);
-                countE = 0;
+        if(buttonGuide.checkCollision(player)){
+            buttonGuide.setImageOffsetX(1);
+            if (countG++ == 20){ // 一個延遲後切換場景
+                gsChangeListener.changeScene(MainPanel.GUIDE1_SCENE);
+                countG = 0;
             }
             // 切換至排行場景
             // ...待補
@@ -106,7 +106,7 @@ public class MenuScene extends Scene{
         road.paint(g);
         buttonMode.paint(g);
         buttonLeader.paint(g);
-        buttonExit.paint(g);
+        buttonGuide.paint(g);
         logo.paint(g);
         player.paint(g);
     }

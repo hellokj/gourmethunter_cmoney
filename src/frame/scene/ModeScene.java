@@ -23,6 +23,8 @@ public class ModeScene extends Scene{
     private GameObject Actor_1,Actor_2,Actor_3,Actor_4;
     private GameObject Frame;
     private GameObject ChooseFrame;
+    private GameObject one,two,person;
+    int x;
     private Button buttonStory, buttonInfinity, button2P;
     private Actor player;
     private int countM,countI,count2;
@@ -32,6 +34,8 @@ public class ModeScene extends Scene{
         this.background = new GameObject(0,-22,500, 700, "background/MenuBackground.png");
         this.ChooseFrame = new GameObject(29,110,400,200,"background/ChooseFrame.png");
         this.Frame = new GameObject(45,195,74,74,"background/Frame.png");
+        this.one = new GameObject(45,270,35,35,"background/1P.png");
+        this.x = 45;
         this.Actor_1 = new GameObject(50,200,64,64,"Actor/Actor_1.png");
         this.Actor_2 = new GameObject(150,200,64,64,"Actor/Actor_2.png");
         this.Actor_3 = new GameObject(250,200,64,64,"Actor/Actor_3.png");
@@ -43,6 +47,7 @@ public class ModeScene extends Scene{
         this.buttonInfinity = new Button(190,400,100, 75, 150, 100,"button/Button_Infinity.png");
         this.button2P = new Button(320,400,100, 75, 150, 100,"button/Button_2P.png");
         this.player = new Actor(250, 700, 32, 32);
+        this.person = this.one;
     }
      @Override
     public KeyListener genKeyListener() {
@@ -66,15 +71,27 @@ public class ModeScene extends Scene{
                         break;
                     case KeyEvent.VK_1:
                         Frame.setX(45);
+                        person.setX(x);
                         break;
                     case KeyEvent.VK_2:
                         Frame.setX(145);
+                        person.setX(100+x);
                         break;
                     case KeyEvent.VK_3:
                         Frame.setX(245);
+                        person.setX(200+x);
                         break;
                     case KeyEvent.VK_4:
                         Frame.setX(345);
+                        person.setX(300+x);
+                        break;
+                    case KeyEvent.VK_ENTER:
+                        if(person==two){
+                            
+                        }
+                        x = 80;
+                        two = new GameObject(Frame.getX()+35,270,35,35,"background/2P.png");
+                        person = two;
                         break;
                 }
             }
@@ -157,6 +174,10 @@ public class ModeScene extends Scene{
         background.paint(g);
         ChooseFrame.paint(g);
         Frame.paint(g);
+        one.paint(g);
+        if(person==two){
+            two.paint(g);
+        }
         Actor_1.paint(g);
         Actor_2.paint(g);
         Actor_3.paint(g);
