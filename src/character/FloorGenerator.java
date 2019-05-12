@@ -24,8 +24,19 @@ public class FloorGenerator {
         Trap trap = TrapGenerator.getInstance().genTrap(layer);
         Floor floor = new Floor(getRandom(0, MainPanel.window.width - 64), last.y + getRandom(50, 70), trap);
         if (layer >= 10){
-            floor.setSpeedY((float)(- 1 * (layer / 10)));
+            if ((float)(- 1 * (layer / 10)) < -3){
+                floor.setSpeedY(-3);
+            }else {
+                floor.setSpeedY((float)(- 1 * (layer / 10)));
+            }
         }
+        return floor;
+    }
+
+    public Floor genDancingFloor(Floor current){
+        Trap trap = TrapGenerator.getInstance().genSpecificTrap(TrapGenerator.TRAP_DANCING);
+        Floor floor = new Floor(current.x, current.y + 32, trap);
+        floor.setSpeedY(0);
         return floor;
     }
 
