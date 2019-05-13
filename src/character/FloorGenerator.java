@@ -1,24 +1,13 @@
 package character;
 
-import character.trap.FragmentTrap;
 import character.trap.Trap;
 import character.trap.TrapGenerator;
-import frame.GameFrame;
 import frame.MainPanel;
 
 import java.util.ArrayList;
 
 public class FloorGenerator {
-
-    private static FloorGenerator floorGenerator;
     private TrapGenerator trapGenerator;
-
-//    public static FloorGenerator getInstance(){
-//        if (floorGenerator == null){
-//            floorGenerator = new FloorGenerator();
-//        }
-//        return floorGenerator;
-//    }
 
     public FloorGenerator(){
         trapGenerator = new TrapGenerator();
@@ -27,7 +16,7 @@ public class FloorGenerator {
     // 傳入當前層數，調整生成機率
     public Floor genFloor(ArrayList<Floor> floors, Floor last, int layer){
         Trap trap = trapGenerator.genTrap(layer);
-        Floor floor = new Floor(getRandom(0, MainPanel.window.width - 64), last.y + getRandom(50, 70), trap);
+        Floor floor = new Floor(getRandom(0, MainPanel.CURRENT_WINDOW.width - 64), last.y + getRandom(50, 70), trap);
         if (layer >= 10){
             if ((float)(- 1 * (layer / 10)) < -3){
                 floor.setSpeedY(-3);

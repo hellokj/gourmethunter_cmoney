@@ -2,14 +2,11 @@ package frame.scene;
 
 import character.*;
 import character.Button;
-import character.food.Food;
 import character.trap.TrapGenerator;
 import frame.MainPanel;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -60,13 +57,13 @@ public class DancingGameScene extends Scene {
         fg = new FloorGenerator();
         tg = new TrapGenerator();
         floors = new ArrayList<>();
-        floor = new Floor((int) (250 * MainPanel.ratio) - 32, 150 + 32, tg.genSpecificTrap(TrapGenerator.TRAP_DANCING));
+        floor = new Floor(250 - 32, 150 + 32, tg.genSpecificTrap(TrapGenerator.TRAP_DANCING));
         floor.setSpeedY(0);
         floors.add(floor);
         for (int i = 0; i < 14; i++) {
             floors.add(fg.genDancingFloor(floors.get(i)));
         }
-        player = new Actor(250 - 16, 150, 32, 32, 32, 32,MainPanel.player1);
+        player = new Actor(250 - 16, 150, 32, 32, 32, 32,MainPanel.P1);
     }
 
     @Override
@@ -280,13 +277,13 @@ public class DancingGameScene extends Scene {
 
     private Button checkCursorPosition(){
         Point cursorCenterPoint = cursor.getCenterPoint();
-        if (cursorCenterPoint.y < button_resume.getModY() + button_resume.getDrawHeight()*MainPanel.ratio && cursorCenterPoint.y > button_resume.getModY()){
+        if (cursorCenterPoint.y < button_resume.getModY() + button_resume.getDrawHeight()*MainPanel.RATIO && cursorCenterPoint.y > button_resume.getModY()){
             return button_resume;
         }
-        if (cursorCenterPoint.y < button_new_game.getModY() + button_new_game.getDrawHeight()*MainPanel.ratio && cursorCenterPoint.y > button_new_game.getModY()){
+        if (cursorCenterPoint.y < button_new_game.getModY() + button_new_game.getDrawHeight()*MainPanel.RATIO && cursorCenterPoint.y > button_new_game.getModY()){
             return button_new_game;
         }
-        if (cursorCenterPoint.y < button_menu.getModY() + button_menu.getDrawHeight()*MainPanel.ratio && cursorCenterPoint.y > button_menu.getModY()){
+        if (cursorCenterPoint.y < button_menu.getModY() + button_menu.getDrawHeight()*MainPanel.RATIO && cursorCenterPoint.y > button_menu.getModY()){
             return button_menu;
         }
         return null;
@@ -294,7 +291,7 @@ public class DancingGameScene extends Scene {
 
     // 比天花板高就消失
     private boolean checkTopBoundary(GameObject gameObject){
-        return gameObject.getTop() <= this.roof.getModY() + this.roof.getDrawHeight()*MainPanel.ratio;
+        return gameObject.getTop() <= this.roof.getModY() + this.roof.getDrawHeight()*MainPanel.RATIO;
     }
 
     private void changeDirection(){
@@ -314,15 +311,15 @@ public class DancingGameScene extends Scene {
         this.fallingDelayCount = 0;
         switch (level){
             case 1:
-                this.fallingDelay = 50;
+                this.fallingDelay = 30;
                 this.fallingAmount = 3;
                 break;
             case 2:
-                this.fallingDelay = 45;
+                this.fallingDelay = 30;
                 this.fallingAmount = 5;
                 break;
             case 3:
-                this.fallingDelay = 40;
+                this.fallingDelay = 30;
                 this.fallingAmount = 6;
                 break;
             case 4:

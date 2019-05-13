@@ -25,8 +25,6 @@ public class TrapGenerator {
     private int genRate_FlippingTrap;
     private int genRate_DarknessTrap;
 
-//    private static TrapGenerator trapGenerator;
-
     public TrapGenerator(){
         // 初始生成機率
         genRate_RunningTrap = 20;
@@ -38,13 +36,6 @@ public class TrapGenerator {
         genRate_FlippingTrap = 60;
         genRate_DarknessTrap = 70;
     }
-
-//    public static TrapGenerator getInstance(){
-//        if (trapGenerator == null){
-//            trapGenerator = new TrapGenerator();
-//        }
-//        return trapGenerator;
-//    }
 
     // 測試用生成器
     public Trap genSpecificTrap(int trapCode){

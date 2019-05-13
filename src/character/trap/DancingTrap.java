@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DancingTrap implements Trap {
-    private static final String[] imagePaths =
+    private final String[] imagePaths =
             // 0 : down, 1 : right, 2 : up, 3 : left
             {"floor/DancingFloor_0.png", "floor/DancingFloor_1.png", "floor/DancingFloor_2.png", "floor/DancingFloor_3.png"};
-    private static final String imagePath = "floor/Brick.png";
-    private static final int[] choosingImageMode = {0};
+    private final String imagePath = "floor/Brick.png";
+    private final int[] choosingImageMode = {0};
 
     private ArrayList<BufferedImage> images;
     private ArrayList<String> imagesPaths;
@@ -75,7 +75,6 @@ public class DancingTrap implements Trap {
             player.setStop(false);
             player.setSpeedX(initialSpeedX);
             floor.setCompleted(true);
-
         }
     }
 }

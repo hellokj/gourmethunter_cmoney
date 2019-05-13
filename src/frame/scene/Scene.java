@@ -14,19 +14,22 @@ import java.io.IOException;
 
 public abstract class Scene {
     public static final float GRAVITY = 0.8f;
-    public static final float FRICTION = 0.3f;
+    public static final float FRICTION = 0.4f;
     public static boolean isDark = false;
-//    public static boolean isCorrect, isWrong; // for dancing mode
-    public static final BufferedImage darkness = ResourcesManager.getInstance().getImage("background/Darkness.png");
+    public Actor touchedPlayer;
+
+    public final BufferedImage darkness = ResourcesManager.getInstance().getImage("background/Darkness.png");
+    public final BufferedImage blanket = ResourcesManager.getInstance().getImage("background/BlackBlanket2.png");
+    public final BufferedImage blanket2 = ResourcesManager.getInstance().getImage("background/BlackBlanket2.png");
     public int darkDelay;
     public static final AudioClip HEAL = ResourcesManager.getInstance().getSound("sound/heal.au");
     public static final AudioClip JUMP = ResourcesManager.getInstance().getSound("sound/jump.au");
     public static final AudioClip BUMP = ResourcesManager.getInstance().getSound("sound/Collision.au");
     public static final AudioClip DIE = ResourcesManager.getInstance().getSound("sound/scream.au");
-    public static final AudioClip RUN = ResourcesManager.getInstance().getSound("sound/run.au");
-    public static final AudioClip FLASH = ResourcesManager.getInstance().getSound("sound/Flash1.au");
+//    public static final AudioClip RUN = ResourcesManager.getInstance().getSound("sound/run.au");
+//    public static final AudioClip FLASH = ResourcesManager.getInstance().getSound("sound/Flash1.au");
     public static final AudioClip CORRECT = ResourcesManager.getInstance().getSound("sound/correct.au");
-    public static final AudioClip ERROR = ResourcesManager.getInstance().getSound("sound/error.au");
+//    public static final AudioClip ERROR = ResourcesManager.getInstance().getSound("sound/error.au");
     public static final AudioClip TYPING = ResourcesManager.getInstance().getSound("sound/typing1.au");
     public static final AudioClip VICTORY = ResourcesManager.getInstance().getSound("sound/Victory2.au");
     public static final AudioClip BUTTON_CLICK = ResourcesManager.getInstance().getSound("sound/ButtonClick.au");

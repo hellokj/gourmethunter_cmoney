@@ -33,15 +33,18 @@ public class TwoPlayerGameScene extends Scene {
     // 顯示板
     private GameObject hungerLabel1, hungerLabel2;
 
+    // 數值
     private int key; // 鍵盤輸入值
     private int count1, count2; // 死亡跳起計數器
     private int layer; // 地下階層
     private Food eatenFood1, eatenFood2;
+
     // 印出文字相關
     private boolean showLayer, showHeal1, showHeal2;
     private int msgWidth, msgAscent;
     private FontMetrics fm;
     private int layerDrawingCount, healDrawingCount1, healDrawingCount2; // 文字顯示時間
+
     // timer延遲調整
     private boolean up_p1 = false, down_p1 = false, left_p1 = false, right_p1 = false;
     private boolean up_p2 = false, down_p2 = false, left_p2 = false, right_p2 = false;
@@ -64,11 +67,11 @@ public class TwoPlayerGameScene extends Scene {
         // 場景物件
         setSceneObject();
         roof = new GameObject(0, 0, 500, 64, 500, 64, "background/Roof.png");
-        player1 = new Actor(240, 200, 32, 32, 32, 32, MainPanel.player1);
-        player2 = new Actor(282, 200, 32, 32, 32, 32, MainPanel.player2);
+        player1 = new Actor(240, 200, 32, 32, 32, 32, MainPanel.P1);
+        player2 = new Actor(282, 200, 32, 32, 32, 32, MainPanel.P2);
         // 顯示板
-        hungerLabel1 = new GameObject(28,8, 64, 32,64, 32, "background/HungerLabel.png");
-        hungerLabel2 = new GameObject(278,8, 64, 32,64, 32, "background/HungerLabel.png");
+        hungerLabel1 = new GameObject(28,8, 64, 32,64, 32, "background/Hunger1P.png");
+        hungerLabel2 = new GameObject(278,8, 64, 32,64, 32, "background/Hunger2P.png");
         winnerBoard1 = new GameObject(250 - 150, 250, 300, 200, 300, 200, "background/Player1Win_1.png");
         winnerBoard2 = new GameObject(250 - 150, 250, 300, 200, 300, 200, "background/Player2Win_1.png");
         restart = new Button(117, 435 - 48, 72, 48, 150, 100, "button/Restart.png");
@@ -99,8 +102,8 @@ public class TwoPlayerGameScene extends Scene {
         background_1 = new GameObject(0, 700, 500, 700, 500, 700, "background/Jungle2.png");
         background_0.setBoundary();
         background_1.setBoundary();
-        fire_left = new AnimationGameObject(0, (int) (background_0.getModY() + background_0.getDrawHeight()*MainPanel.ratio/2), 30, 30, 64, 64,"background/Fire.png");
-        fire_right = new AnimationGameObject(470, (int) (background_0.getModY() + background_0.getDrawHeight()*MainPanel.ratio/2), 30, 30, 64, 64,"background/Fire.png");
+        fire_left = new AnimationGameObject(0, (int) (background_0.getModY() + background_0.getDrawHeight()*MainPanel.RATIO /2), 30, 30, 64, 64,"background/Fire.png");
+        fire_right = new AnimationGameObject(470, (int) (background_0.getModY() + background_0.getDrawHeight()*MainPanel.RATIO /2), 30, 30, 64, 64,"background/Fire.png");
     }
 
     @Override
@@ -117,9 +120,8 @@ public class TwoPlayerGameScene extends Scene {
                             right_p1 = true;
                         }
                         if (p1_win || p2_win){
-                            VICTORY.stop();
+                            menu.setImageOffsetX(1);
                             isPlayingSound = false;
-                            gsChangeListener.changeScene(MainPanel.MENU_SCENE);
                         }
                         break;
                     case KeyEvent.VK_LEFT:
@@ -127,9 +129,8 @@ public class TwoPlayerGameScene extends Scene {
                             left_p1 = true;
                         }
                         if (p1_win || p2_win){
-                            VICTORY.stop();
+                            restart.setImageOffsetX(1);
                             isPlayingSound = false;
-                            reset();
                         }
                         break;
                     case KeyEvent.VK_UP:
@@ -180,9 +181,9 @@ public class TwoPlayerGameScene extends Scene {
                         }
                         break;
                     case KeyEvent.VK_R:
-//                        player1.reset();
-//                        player2.reset();
-                        reset();
+//                        P1.reset();
+//                        P2.reset();
+//                        reset();
                         break;
                     case KeyEvent.VK_ESCAPE:
                         if (isPause){
@@ -216,9 +217,21 @@ public class TwoPlayerGameScene extends Scene {
                     switch (e.getKeyCode()){
                         // p1 controller
                         case KeyEvent.VK_RIGHT:
+                            if (p1_win || p2_win){
+                                VICTORY.stop();
+                                BUTTON_CLICK.play();
+                                menu.setImageOffsetX(0);
+                                gsChangeListener.changeScene(MainPanel.MENU_SCENE);
+                            }
                             right_p1 = false;
                             break;
                         case KeyEvent.VK_LEFT:
+                            if (p1_win || p2_win){
+                                VICTORY.stop();
+                                BUTTON_CLICK.play();
+                                restart.setImageOffsetX(0);
+                                reset();
+                            }
                             left_p1 = false;
                             break;
                         case KeyEvent.VK_UP:
@@ -274,6 +287,7 @@ public class TwoPlayerGameScene extends Scene {
                     if (darkDelay++ == 120){
                         isDark = false;
                         darkDelay = 0;
+                        this.touchedPlayer = null;
                     }
                 }
                 MainPanel.checkLeftRightBoundary(player1);
@@ -354,10 +368,10 @@ public class TwoPlayerGameScene extends Scene {
                 player1.update();
                 player2.update();
                 // 掉落死亡 or 餓死後落下
-                if (player1.getModY() + player1.getDrawHeight() * MainPanel.ratio > MainPanel.window.height){
+                if (player1.getModY() + player1.getDrawHeight() * MainPanel.RATIO > MainPanel.CURRENT_WINDOW.height){
                     player1.die();
                 }
-                if (player2.getModY() + player2.getDrawHeight() * MainPanel.ratio > MainPanel.window.height){
+                if (player2.getModY() + player2.getDrawHeight() * MainPanel.RATIO > MainPanel.CURRENT_WINDOW.height){
                     player2.die();
                 }
                 // 背景刷新
@@ -372,7 +386,7 @@ public class TwoPlayerGameScene extends Scene {
                         player1.setSpeedX(0);
                         player1.update();
                         // 完全落下後切場景
-                        if (player1.getModY() + player1.getDrawHeight()*MainPanel.ratio > MainPanel.window.height){
+                        if (player1.getModY() + player1.getDrawHeight()*MainPanel.RATIO > MainPanel.CURRENT_WINDOW.height){
                             bgm.stop();
                             if (!isPlayingSound){
                                 VICTORY.loop();
@@ -392,7 +406,7 @@ public class TwoPlayerGameScene extends Scene {
                         player2.setSpeedX(0);
                         player2.update();
                         // 完全落下後切場景
-                        if (player2.getModY() + player2.getDrawHeight() * MainPanel.ratio > MainPanel.window.height){
+                        if (player2.getModY() + player2.getDrawHeight() * MainPanel.RATIO > MainPanel.CURRENT_WINDOW.height){
                             bgm.stop();
                             if (!isPlayingSound){
                                 VICTORY.loop();
@@ -443,17 +457,17 @@ public class TwoPlayerGameScene extends Scene {
             return;
         }
         if (collisionDirP1 == Actor.MOVE_RIGHT && collisionDirP2 == Actor.MOVE_LEFT){
-//            player1.stop();
-//            player2.stop();
+//            P1.stop();
+//            P2.stop();
             player1.setX(initialPosition2 - player1.getDrawWidth());
             player2.setX(initialPosition2);
             System.out.println("???");
 //            return;
         }
         if (collisionDirP1 == Actor.MOVE_LEFT && collisionDirP2 == Actor.MOVE_RIGHT){
-//            player2.stop();
+//            P2.stop();
             player2.setX(initialPosition1 - player2.getDrawWidth());
-//            player1.stop();
+//            P1.stop();
             player1.setX(initialPosition1);
 //            return;
         }
@@ -707,134 +721,149 @@ public class TwoPlayerGameScene extends Scene {
     @Override
     public void paint(Graphics g, MainPanel mainPanel) {
         Graphics2D g2d = (Graphics2D)g;
-        Graphics2D g2d2 = (Graphics2D)g.create();
-        if (isDark){
-            background_0.paint(g2d, mainPanel);
-            background_1.paint(g2d, mainPanel);
-            fire_left.paint(g2d, mainPanel);
-            fire_right.paint(g2d, mainPanel);
-            roof.paint(g2d, mainPanel);
-            hungerLabel1.paint(g2d, mainPanel);
-            hungerBack1.paint(g2d, mainPanel);
-            hungerCount1.paint(g2d, mainPanel);
-            hungerLabel2.paint(g2d, mainPanel);
-            hungerBack2.paint(g2d, mainPanel);
-            hungerCount2.paint(g2d, mainPanel);
+//        if (isDark){
+//            background_0.paint(g2d, mainPanel);
+//            background_1.paint(g2d, mainPanel);
+//            fire_left.paint(g2d, mainPanel);
+//            fire_right.paint(g2d, mainPanel);
+//            roof.paint(g2d, mainPanel);
+//            hungerLabel1.paint(g2d, mainPanel);
+//            hungerBack1.paint(g2d, mainPanel);
+//            hungerCount1.paint(g2d, mainPanel);
+//            hungerLabel2.paint(g2d, mainPanel);
+//            hungerBack2.paint(g2d, mainPanel);
+//            hungerCount2.paint(g2d, mainPanel);
+//
+//            for (Floor floor : floors) {
+//                floor.paint(g, mainPanel);
+//            }
+//
+//            g2d.drawImage(darkness, 0, (int) (48 * MainPanel.RATIO), (int) (500 * MainPanel.RATIO), (int) (700 * MainPanel.RATIO), 0, 0, 1024, 768, null);
+//
+//            player1.paint(g2d, mainPanel);
+//            player2.paint(g2d, mainPanel);
+//            // 畫出 p1, p2 指示
+//            g2d.setFont(MainPanel.ENGLISH_FONT.deriveFont(16.0f*MainPanel.RATIO));
+//            g2d.setColor(Color.RED);
+//            String pointer1 = "1P";
+//            fm = g2d.getFontMetrics();
+//            msgWidth = fm.stringWidth(pointer1);
+//            msgAscent = fm.getAscent();
+//            g2d.drawString(pointer1, player1.getModX() - (msgWidth - player1.getDrawWidth()*MainPanel.RATIO)/ 2 ,player1.getModY());
+//            String pointer2 = "2P";
+//            fm = g2d.getFontMetrics();
+//            msgWidth = fm.stringWidth(pointer2);
+//            msgAscent = fm.getAscent();
+//            g2d.drawString(pointer2, player2.getModX() - (msgWidth - player2.getDrawWidth()*MainPanel.RATIO)/ 2, player2.getModY());
+//
+//            // 印出吃到食物的回覆值
+//            g2d.setFont(MainPanel.ENGLISH_FONT.deriveFont(15.0f*MainPanel.RATIO));
+//            g2d.setColor(Color.GREEN);
+//            String healMsg1 = "";
+//            String healMsg2 = "";
+//            if (showHeal1){
+//                if (++healDrawingCount1 <= 50){
+//                    healMsg1 = "+ "+ eatenFood1.getHeal();
+//                }else {
+//                    showHeal1 = false;
+//                    healDrawingCount1 = 0;
+//                }
+//            }
+//            if (showHeal2){
+//                if (++healDrawingCount2 <= 50){
+//                    healMsg2 = "+ "+ eatenFood2.getHeal();
+//                }else {
+//                    showHeal2 = false;
+//                    healDrawingCount2 = 0;
+//                }
+//            }
+//            fm = g2d.getFontMetrics();
+//            msgWidth = fm.stringWidth(healMsg1);
+//            msgAscent = fm.getAscent();
+//            g2d.drawString(healMsg1, player1.getModX() - (msgWidth*MainPanel.RATIO - player1.getDrawWidth()*MainPanel.RATIO)/ 2, player1.getModY());
+//            g2d.drawString(healMsg2, player2.getModX() - (msgWidth*MainPanel.RATIO - player2.getDrawWidth()*MainPanel.RATIO)/ 2, player2.getModY());
+//
+//            // 印出飢餓值
+//            Font engFont = MainPanel.ENGLISH_FONT.deriveFont(16.0f*MainPanel.RATIO);
+//            Font chiFont = MainPanel.CHINESE_FONT.deriveFont(36.0f*MainPanel.RATIO);
+//            g2d.setFont(engFont);
+//            g2d.setColor(Color.WHITE);
+//            g2d.drawString(String.valueOf(hungerValue1), (96 + 112)*MainPanel.RATIO, 30*MainPanel.RATIO);
+//            g2d.drawString(String.valueOf(hungerValue2), (96 + 112 + 250)*MainPanel.RATIO, 30*MainPanel.RATIO);
+//            g2d.setFont(chiFont);
+//
+//            // 印出地下層數
+//            String msg = "";
+//            if (showLayer){
+//                if (++layerDrawingCount <= 80){
+//                    msg = "地下 " + layer + " 層";
+//                }else {
+//                    msg = "";
+//                    showLayer = false;
+//                    layerDrawingCount = 0;
+//                }
+//            }
+//            msgWidth = fm.stringWidth(msg);
+//            msgAscent = fm.getAscent();
+//            g2d.drawString(msg, 250*MainPanel.RATIO - (float) (msgWidth/2), 350*MainPanel.RATIO);
+////        g2d.setFont(chiFont.deriveFont(16.0f*MainPanel.RATIO));
+////        g2d.drawString("地下 " + layer + " 層", 365*MainPanel.RATIO, 30*MainPanel.RATIO);
+//
+//            //閃光開始
+//            if(FlashTrap.getFlashState()){
+//                flashCount++;
+//            }//閃光持續
+//            if(flashCount <15 && flashCount >0){
+//                FlashTrap.getFlash().setCounter(flashCount -1);
+//                //System.out.println("**"+flashCount);
+//                FlashTrap.getFlash().paint(g2d, mainPanel);
+//            }//閃光結束
+//            else if(flashCount >=15){
+//                FlashTrap.setFlashState(false);
+//                flashCount = 0;
+//            }
+//
+//            // 印出選單
+//            if (isCalled){
+//                button_menu.paint(g2d, mainPanel);
+//                button_resume.paint(g2d, mainPanel);
+//                button_new_game.paint(g2d, mainPanel);
+//                cursor.paint(g2d, mainPanel);
+//            }
+//
+//            if (p1_win){
+//                winnerBoard1.paint(g, mainPanel);
+//                restart.paint(g, mainPanel);
+//                menu.paint(g, mainPanel);
+//            }
+//            if (p2_win){
+//                winnerBoard2.paint(g, mainPanel);
+//                restart.paint(g, mainPanel);
+//                menu.paint(g, mainPanel);
+//            }
+//            g2d.setClip(new Ellipse2D.Float(player2.getCenterPoint().x - 75 * MainPanel.RATIO, player2.getCenterPoint().y - 75 * MainPanel.RATIO, 150 * MainPanel.RATIO, 150 * MainPanel.RATIO));
+//            g2d.setClip(new Ellipse2D.Float(player1.getCenterPoint().x - 75 * MainPanel.RATIO, player1.getCenterPoint().y - 75 * MainPanel.RATIO, 150 * MainPanel.RATIO, 150 * MainPanel.RATIO));
+//        }
 
-            for (Floor floor : floors) {
-                floor.paint(g, mainPanel);
-            }
 
-            g2d.drawImage(darkness, 0, (int) (48 * MainPanel.ratio), (int) (500 * MainPanel.ratio), (int) (700 * MainPanel.ratio), 0, 0, 1024, 768, null);
-
-            player1.paint(g2d, mainPanel);
-            player2.paint(g2d, mainPanel);
-            // 畫出 p1, p2 指示
-            g2d.setFont(MainPanel.ENGLISH_FONT.deriveFont(16.0f*MainPanel.ratio));
-            g2d.setColor(Color.RED);
-            String pointer1 = "1P";
-            fm = g2d.getFontMetrics();
-            msgWidth = fm.stringWidth(pointer1);
-            msgAscent = fm.getAscent();
-            g2d.drawString(pointer1, player1.getModX() - (msgWidth - player1.getDrawWidth()*MainPanel.ratio)/ 2 ,player1.getModY());
-            String pointer2 = "2P";
-            fm = g2d.getFontMetrics();
-            msgWidth = fm.stringWidth(pointer2);
-            msgAscent = fm.getAscent();
-            g2d.drawString(pointer2, player2.getModX() - (msgWidth - player2.getDrawWidth()*MainPanel.ratio)/ 2, player2.getModY());
-
-            // 印出吃到食物的回覆值
-            g2d.setFont(MainPanel.ENGLISH_FONT.deriveFont(15.0f*MainPanel.ratio));
-            g2d.setColor(Color.GREEN);
-            String healMsg1 = "";
-            String healMsg2 = "";
-            if (showHeal1){
-                if (++healDrawingCount1 <= 50){
-                    healMsg1 = "+ "+ eatenFood1.getHeal();
-                }else {
-                    showHeal1 = false;
-                    healDrawingCount1 = 0;
-                }
-            }
-            if (showHeal2){
-                if (++healDrawingCount2 <= 50){
-                    healMsg2 = "+ "+ eatenFood2.getHeal();
-                }else {
-                    showHeal2 = false;
-                    healDrawingCount2 = 0;
-                }
-            }
-            fm = g2d.getFontMetrics();
-            msgWidth = fm.stringWidth(healMsg1);
-            msgAscent = fm.getAscent();
-            g2d.drawString(healMsg1, player1.getModX() - (msgWidth*MainPanel.ratio - player1.getDrawWidth()*MainPanel.ratio)/ 2, player1.getModY());
-            g2d.drawString(healMsg2, player2.getModX() - (msgWidth*MainPanel.ratio - player2.getDrawWidth()*MainPanel.ratio)/ 2, player2.getModY());
-
-            // 印出飢餓值
-            Font engFont = MainPanel.ENGLISH_FONT.deriveFont(16.0f*MainPanel.ratio);
-            Font chiFont = MainPanel.CHINESE_FONT.deriveFont(36.0f*MainPanel.ratio);
-            g2d.setFont(engFont);
-            g2d.setColor(Color.WHITE);
-            g2d.drawString(String.valueOf(hungerValue1), (96 + 112)*MainPanel.ratio, 30*MainPanel.ratio);
-            g2d.drawString(String.valueOf(hungerValue2), (96 + 112 + 250)*MainPanel.ratio, 30*MainPanel.ratio);
-            g2d.setFont(chiFont);
-
-            // 印出地下層數
-            String msg = "";
-            if (showLayer){
-                if (++layerDrawingCount <= 80){
-                    msg = "地下 " + layer + " 層";
-                }else {
-                    msg = "";
-                    showLayer = false;
-                    layerDrawingCount = 0;
-                }
-            }
-            msgWidth = fm.stringWidth(msg);
-            msgAscent = fm.getAscent();
-            g2d.drawString(msg, 250*MainPanel.ratio - (float) (msgWidth/2), 350*MainPanel.ratio);
-//        g2d.setFont(chiFont.deriveFont(16.0f*MainPanel.ratio));
-//        g2d.drawString("地下 " + layer + " 層", 365*MainPanel.ratio, 30*MainPanel.ratio);
-
-            //閃光開始
-            if(FlashTrap.getFlashState()){
-                flashCount++;
-            }//閃光持續
-            if(flashCount <15 && flashCount >0){
-                FlashTrap.getFlash().setCounter(flashCount -1);
-                //System.out.println("**"+flashCount);
-                FlashTrap.getFlash().paint(g2d, mainPanel);
-            }//閃光結束
-            else if(flashCount >=15){
-                FlashTrap.setFlashState(false);
-                flashCount = 0;
-            }
-
-            // 印出選單
-            if (isCalled){
-                button_menu.paint(g2d, mainPanel);
-                button_resume.paint(g2d, mainPanel);
-                button_new_game.paint(g2d, mainPanel);
-                cursor.paint(g2d, mainPanel);
-            }
-
-            if (p1_win){
-                winnerBoard1.paint(g, mainPanel);
-                restart.paint(g, mainPanel);
-                menu.paint(g, mainPanel);
-            }
-            if (p2_win){
-                winnerBoard2.paint(g, mainPanel);
-                restart.paint(g, mainPanel);
-                menu.paint(g, mainPanel);
-            }
-            g2d.setClip(new Ellipse2D.Float(player1.getCenterPoint().x - 75 * MainPanel.ratio, player1.getCenterPoint().y - 75 * MainPanel.ratio, 150 * MainPanel.ratio, 150 * MainPanel.ratio));
-            g2d.setClip(new Ellipse2D.Float(player2.getCenterPoint().x - 75 * MainPanel.ratio, player2.getCenterPoint().y - 75 * MainPanel.ratio, 150 * MainPanel.ratio, 150 * MainPanel.ratio));
-        }
         background_0.paint(g2d, mainPanel);
         background_1.paint(g2d, mainPanel);
         fire_left.paint(g2d, mainPanel);
         fire_right.paint(g2d, mainPanel);
+
+        for (Floor floor : floors) {
+            floor.paint(g, mainPanel);
+        }
+
+        if (isDark){
+            if (this.touchedPlayer.equals(player1)){
+                g.drawImage(blanket, player1.getX() + 16 - 575, player1.getY() + 16 - 775, player1.getX() + 16 - 575 + 1150, player1.getY() + 16 - 775 + 1550,0,0, 1150, 1550, null);
+            }
+            if (this.touchedPlayer.equals(player2)){
+                g.drawImage(blanket2, player2.getX() + 16 - 575, player2.getY() + 16 - 775, player2.getX() + 16 - 575 + 1150, player2.getY() + 16 - 775 + 1550,0,0, 1150, 1550, null);
+            }
+        }
+
         roof.paint(g2d, mainPanel);
         hungerLabel1.paint(g2d, mainPanel);
         hungerBack1.paint(g2d, mainPanel);
@@ -843,28 +872,25 @@ public class TwoPlayerGameScene extends Scene {
         hungerBack2.paint(g2d, mainPanel);
         hungerCount2.paint(g2d, mainPanel);
 
-        for (Floor floor : floors) {
-            floor.paint(g, mainPanel);
-        }
 
         player1.paint(g2d, mainPanel);
         player2.paint(g2d, mainPanel);
         // 畫出 p1, p2
-        g2d.setFont(MainPanel.ENGLISH_FONT.deriveFont(16.0f*MainPanel.ratio));
+        g2d.setFont(MainPanel.ENGLISH_FONT.deriveFont(16.0f*MainPanel.RATIO));
         g2d.setColor(Color.RED);
         String pointer1 = "1P";
         fm = g2d.getFontMetrics();
         msgWidth = fm.stringWidth(pointer1);
         msgAscent = fm.getAscent();
-        g2d.drawString(pointer1, player1.getModX() - (msgWidth - player1.getDrawWidth()*MainPanel.ratio)/ 2 ,player1.getModY());
+        g2d.drawString(pointer1, player1.getModX() - (msgWidth - player1.getDrawWidth()*MainPanel.RATIO)/ 2 ,player1.getModY());
         String pointer2 = "2P";
         fm = g2d.getFontMetrics();
         msgWidth = fm.stringWidth(pointer2);
         msgAscent = fm.getAscent();
-        g2d.drawString(pointer2, player2.getModX() - (msgWidth - player2.getDrawWidth()*MainPanel.ratio)/ 2, player2.getModY());
+        g2d.drawString(pointer2, player2.getModX() - (msgWidth - player2.getDrawWidth()*MainPanel.RATIO)/ 2, player2.getModY());
 
         // 印出吃到食物的回覆值
-        g2d.setFont(MainPanel.ENGLISH_FONT.deriveFont(15.0f*MainPanel.ratio));
+        g2d.setFont(MainPanel.ENGLISH_FONT.deriveFont(15.0f*MainPanel.RATIO));
         g2d.setColor(Color.GREEN);
         String healMsg1 = "";
         String healMsg2 = "";
@@ -887,16 +913,16 @@ public class TwoPlayerGameScene extends Scene {
         fm = g2d.getFontMetrics();
         msgWidth = fm.stringWidth(healMsg1);
         msgAscent = fm.getAscent();
-        g2d.drawString(healMsg1, player1.getModX() - (msgWidth*MainPanel.ratio - player1.getDrawWidth()*MainPanel.ratio)/ 2, player1.getModY());
-        g2d.drawString(healMsg2, player2.getModX() - (msgWidth*MainPanel.ratio - player2.getDrawWidth()*MainPanel.ratio)/ 2, player2.getModY());
+        g2d.drawString(healMsg1, player1.getModX() - (msgWidth*MainPanel.RATIO - player1.getDrawWidth()*MainPanel.RATIO)/ 2, player1.getModY());
+        g2d.drawString(healMsg2, player2.getModX() - (msgWidth*MainPanel.RATIO - player2.getDrawWidth()*MainPanel.RATIO)/ 2, player2.getModY());
 
         // 印出飢餓值
-        Font engFont = MainPanel.ENGLISH_FONT.deriveFont(16.0f*MainPanel.ratio);
-        Font chiFont = MainPanel.CHINESE_FONT.deriveFont(36.0f*MainPanel.ratio);
+        Font engFont = MainPanel.ENGLISH_FONT.deriveFont(16.0f*MainPanel.RATIO);
+        Font chiFont = MainPanel.CHINESE_FONT.deriveFont(36.0f*MainPanel.RATIO);
         g2d.setFont(engFont);
         g2d.setColor(Color.WHITE);
-        g2d.drawString(String.valueOf(hungerValue1), (96 + 112)*MainPanel.ratio, 30*MainPanel.ratio);
-        g2d.drawString(String.valueOf(hungerValue2), (96 + 112 + 250)*MainPanel.ratio, 30*MainPanel.ratio);
+        g2d.drawString(String.valueOf(hungerValue1), (96 + 112)*MainPanel.RATIO, 30*MainPanel.RATIO);
+        g2d.drawString(String.valueOf(hungerValue2), (96 + 112 + 250)*MainPanel.RATIO, 30*MainPanel.RATIO);
         g2d.setFont(chiFont);
 
         // 印出地下層數
@@ -912,9 +938,9 @@ public class TwoPlayerGameScene extends Scene {
         }
         msgWidth = fm.stringWidth(msg);
         msgAscent = fm.getAscent();
-        g2d.drawString(msg, 250*MainPanel.ratio - msgWidth/2, 350*MainPanel.ratio);
-//        g2d.setFont(chiFont.deriveFont(16.0f*MainPanel.ratio));
-//        g2d.drawString("地下 " + layer + " 層", 365*MainPanel.ratio, 30*MainPanel.ratio);
+        g2d.drawString(msg, 250*MainPanel.RATIO - msgWidth/2, 350*MainPanel.RATIO);
+//        g2d.setFont(chiFont.deriveFont(16.0f*MainPanel.RATIO));
+//        g2d.drawString("地下 " + layer + " 層", 365*MainPanel.RATIO, 30*MainPanel.RATIO);
 
         //閃光開始
         if(FlashTrap.getFlashState()){
@@ -952,7 +978,7 @@ public class TwoPlayerGameScene extends Scene {
 
     // 比天花板高就消失
     private boolean checkTopBoundary(GameObject gameObject){
-        return gameObject.getTop() <= this.roof.getModY() + this.roof.getDrawHeight()*MainPanel.ratio;
+        return gameObject.getTop() <= this.roof.getModY() + this.roof.getDrawHeight()*MainPanel.RATIO;
     }
 
     // 確認畫面中階梯數量
@@ -960,7 +986,7 @@ public class TwoPlayerGameScene extends Scene {
         int count = 0;
         for (int i = 0; i < floors.size(); i++) {
             Floor current = floors.get(i);
-            if (current.getModY() > 0 && current.getModY() + current.getDrawHeight() * MainPanel.ratio < MainPanel.window.height){
+            if (current.getModY() > 0 && current.getModY() + current.getDrawHeight() * MainPanel.RATIO < MainPanel.CURRENT_WINDOW.height){
                 count++;
             }
         }
@@ -970,12 +996,12 @@ public class TwoPlayerGameScene extends Scene {
     // 更新背景圖
     private void updateBackgroundImage(){
         int background_rising_speed = 5;
-        if (background_0.getModY() + background_0.getDrawHeight()*MainPanel.ratio <= 0){
+        if (background_0.getModY() + background_0.getDrawHeight()*MainPanel.RATIO <= 0){
             background_0 = new GameObject(0, 700, 500, 700, 500, 700, "background/Jungle2.png");
             layer++;
             showLayer = true;
         }
-        if (background_1.getModY() + background_1.getDrawHeight()*MainPanel.ratio <= 0){
+        if (background_1.getModY() + background_1.getDrawHeight()*MainPanel.RATIO <= 0){
             background_1 = new GameObject(0, 700, 500, 700, 500, 700, "background/Jungle2.png");
         }
         background_0.setY(background_0.getY() - background_rising_speed);
@@ -1029,13 +1055,13 @@ public class TwoPlayerGameScene extends Scene {
 
     private Button checkCursorPosition(){
         Point cursorCenterPoint = cursor.getCenterPoint();
-        if (cursorCenterPoint.y < button_resume.getModY() + button_resume.getDrawHeight()*MainPanel.ratio && cursorCenterPoint.y > button_resume.getModY()){
+        if (cursorCenterPoint.y < button_resume.getModY() + button_resume.getDrawHeight()*MainPanel.RATIO && cursorCenterPoint.y > button_resume.getModY()){
             return button_resume;
         }
-        if (cursorCenterPoint.y < button_new_game.getModY() + button_new_game.getDrawHeight()*MainPanel.ratio && cursorCenterPoint.y > button_new_game.getModY()){
+        if (cursorCenterPoint.y < button_new_game.getModY() + button_new_game.getDrawHeight()*MainPanel.RATIO && cursorCenterPoint.y > button_new_game.getModY()){
             return button_new_game;
         }
-        if (cursorCenterPoint.y < button_menu.getModY() + button_menu.getDrawHeight()*MainPanel.ratio && cursorCenterPoint.y > button_menu.getModY()){
+        if (cursorCenterPoint.y < button_menu.getModY() + button_menu.getDrawHeight()*MainPanel.RATIO && cursorCenterPoint.y > button_menu.getModY()){
             return button_menu;
         }
         return null;
@@ -1043,7 +1069,7 @@ public class TwoPlayerGameScene extends Scene {
 
     // 火把持續生成
     private void continueGeneration(GameObject gameObject){
-        if (gameObject.getModY() + gameObject.getDrawHeight() * MainPanel.ratio < 0){
+        if (gameObject.getModY() + gameObject.getDrawHeight() * MainPanel.RATIO < 0){
             gameObject.setY(GameFrame.FRAME_HEIGHT);
         }
     }
