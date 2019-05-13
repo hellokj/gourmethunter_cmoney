@@ -7,6 +7,7 @@ import character.trap.FlashTrap;
 import character.trap.TrapGenerator;
 import frame.GameFrame;
 import frame.MainPanel;
+import util.ResourcesManager;
 
 import java.applet.AudioClip;
 import java.awt.*;
@@ -44,18 +45,22 @@ public class TwoPlayerGameScene extends Scene {
     // timer延遲調整
     private boolean up_p1 = false, down_p1 = false, left_p1 = false, right_p1 = false;
     private boolean up_p2 = false, down_p2 = false, left_p2 = false, right_p2 = false;
-
     private int flashCount; //閃光延遲
+
+    private FloorGenerator fg;
+    private TrapGenerator tg;
 
     // show winner
     private Button restart, menu;
     private boolean p1_win, p2_win;
+    private AudioClip bgm;
     private boolean isPlayingSound; // 判斷是否還在執行播放聲音
     private GameObject winnerBoard1, winnerBoard2;
 
     public TwoPlayerGameScene(MainPanel.GameStatusChangeListener gsChangeListener) {
         super(gsChangeListener);
-        BGM_TWO_PLAYER.loop();
+        bgm = ResourcesManager.getInstance().getSound("sound/Menu1.au");
+        bgm.loop();
         // 場景物件
         setSceneObject();
         roof = new GameObject(0, 0, 500, 64, 500, 64, "background/Roof.png");
@@ -74,10 +79,12 @@ public class TwoPlayerGameScene extends Scene {
         hungerBack2 = new GameObject(346, 16, 100, 16, 5, 5, "background/Hunger.png");
         hungerCount2 = new GameObject(346, 16, 0, 16, 5, 5, "background/HungerCount.png");
         // 初始10塊階梯
+        fg = new FloorGenerator();
+        tg = new TrapGenerator();
         floors = new ArrayList<>();
-        floors.add(new Floor(player1.getX(), 200 + 32, TrapGenerator.getInstance().genSpecificTrap(0))); // 初始站立階梯
+        floors.add(new Floor(player1.getX(), 200 + 32, tg.genSpecificTrap(0))); // 初始站立階梯
         for (int i = 0; i < 14; i++) {
-            floors.add(FloorGenerator.getInstance().genFloor(floors, floors.get(i), 0));
+            floors.add(fg.genFloor(floors, floors.get(i), 0));
         }
         isCalled = false;
         isPause = false;
@@ -249,7 +256,7 @@ public class TwoPlayerGameScene extends Scene {
                         if (chooser == button_menu){
                             button_menu.setImageOffsetX(0);
                             BUTTON_CLICK.play();
-                            BGM_INFINITY.stop();
+                            bgm.stop();
                             gsChangeListener.changeScene(MainPanel.MENU_SCENE);
                         }
                         isCalled = false;
@@ -278,7 +285,7 @@ public class TwoPlayerGameScene extends Scene {
                 if (floorAmount < 15 && floors.size() < 20){
                     for (int i = 0; i < 15 - floorAmount; i++) {
                         // 傳入現在層數，生成器將依此更新生成機率
-                        floors.add(FloorGenerator.getInstance().genFloor(floors, findLast(), layer));
+                        floors.add(fg.genFloor(floors, findLast(), layer));
                     }
                 }
                 // 逆向摩擦力
@@ -308,6 +315,7 @@ public class TwoPlayerGameScene extends Scene {
                     floors.get(i).stay();
                     if (checkTopBoundary(floors.get(i))){
                         floors.remove(i);
+                        break;
                     }
                 }
                 if (checkTopBoundary(player1)){
@@ -365,7 +373,7 @@ public class TwoPlayerGameScene extends Scene {
                         player1.update();
                         // 完全落下後切場景
                         if (player1.getModY() + player1.getDrawHeight()*MainPanel.ratio > MainPanel.window.height){
-                            BGM_TWO_PLAYER.stop();
+                            bgm.stop();
                             if (!isPlayingSound){
                                 VICTORY.loop();
                                 isPlayingSound = true;
@@ -385,7 +393,7 @@ public class TwoPlayerGameScene extends Scene {
                         player2.update();
                         // 完全落下後切場景
                         if (player2.getModY() + player2.getDrawHeight() * MainPanel.ratio > MainPanel.window.height){
-                            BGM_TWO_PLAYER.stop();
+                            bgm.stop();
                             if (!isPlayingSound){
                                 VICTORY.loop();
                                 isPlayingSound = true;

@@ -7,7 +7,9 @@ import character.trap.FlashTrap;
 import character.trap.TrapGenerator;
 import frame.GameFrame;
 import frame.MainPanel;
+import util.ResourcesManager;
 
+import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
@@ -21,7 +23,8 @@ public class StoryGameScene extends Scene {
     private AnimationGameObject endingGate;
     private Actor player;
     private ArrayList<Floor> floors;
-    private FloorGenerator floorGenerator;
+    private FloorGenerator fg;
+    private TrapGenerator tg;
 
     // 選單相關
     private boolean isCalled;
@@ -52,12 +55,17 @@ public class StoryGameScene extends Scene {
 
     private int flashCount; //閃光延遲
 
+    // 音效
+    private AudioClip bgm;
+
     private boolean up = false, down = false, left = false, right = false;
 
     public StoryGameScene(MainPanel.GameStatusChangeListener gsChangeListener) {
         super(gsChangeListener);
-        BGM_STORY.loop();
-        floorGenerator = new FloorGenerator();
+        bgm = ResourcesManager.getInstance().getSound("sound/StoryMode.au");
+        bgm.loop();
+        fg = new FloorGenerator();
+        tg = new TrapGenerator();
         // 場景物件
         setSceneObject();
         roof = new GameObject(0, 0, 500, 64, 500, 64,"background/Roof.png");
@@ -75,9 +83,9 @@ public class StoryGameScene extends Scene {
         colon = " : ";
         // 初始10塊階梯
         floors = new ArrayList<>();
-        floors.add(new Floor(player.getX() - (64 - 32), 200 + 32, TrapGenerator.getInstance().genSpecificTrap(TrapGenerator.TRAP_NORMAL))); // 初始站立
+        floors.add(new Floor(player.getX() - (64 - 32), 200 + 32, tg.genSpecificTrap(TrapGenerator.TRAP_NORMAL))); // 初始站立
         for (int i = 0; i < 14; i++) {
-            floors.add(floorGenerator.genFloor(floors, floors.get(i), 0));
+            floors.add(fg.genFloor(floors, floors.get(i), 0));
         }
         isOver = false;
         isCalled = false;
@@ -187,7 +195,7 @@ public class StoryGameScene extends Scene {
                         if (chooser == button_menu){
                             button_menu.setImageOffsetX(0);
                             BUTTON_CLICK.play();
-                            BGM_INFINITY.stop();
+                            bgm.stop();
                             gsChangeListener.changeScene(MainPanel.MENU_SCENE);
                         }
                         isCalled = false;
@@ -213,7 +221,7 @@ public class StoryGameScene extends Scene {
                 hungerValue = player.getHunger();
                 if (floorAmount < 15 && time > 6 && floors.size() < 20){
                     for (int i = 0; i < 15 - floorAmount; i++) {
-                        floors.add(floorGenerator.genFloor(floors, findLast(), 0));
+                        floors.add(fg.genFloor(floors, findLast(), 0));
                     }
                 }
                 // 逆向摩擦力
@@ -239,6 +247,7 @@ public class StoryGameScene extends Scene {
                     floors.get(i).stay();
                     if (checkTopBoundary(floors.get(i))){
                         floors.remove(i);
+                        break;
                     }
                 }
                 // 人物飢餓
@@ -277,7 +286,7 @@ public class StoryGameScene extends Scene {
                     player.update();
                     // 完全落下後切場景
                     if (player.getModY() + player.getDrawHeight()*MainPanel.ratio > MainPanel.window.getHeight()){
-                        BGM_STORY.stop();
+                        bgm.stop();
                         gsChangeListener.changeScene(MainPanel.GAME_OVER_SCENE);
                     }
                 }
@@ -294,7 +303,7 @@ public class StoryGameScene extends Scene {
                 if (endingGate.checkCollision(player)){
                     endingGate.playAnimation();
                     if (key == KeyEvent.VK_UP){
-                        BGM_STORY.stop();
+                        bgm.stop();
                         gsChangeListener.changeScene(MainPanel.END_SCENE);
                     }
                 }

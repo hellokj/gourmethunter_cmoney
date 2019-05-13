@@ -7,6 +7,7 @@ import character.GameObject;
 import frame.MainPanel;
 import util.ResourcesManager;
 
+import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -34,9 +35,12 @@ public class ModeScene extends Scene{
     // timer延遲調整
     private boolean up_p1 = false, down_p1 = false, left_p1 = false, right_p1 = false;
     private boolean up_p2 = false, down_p2 = false, left_p2 = false, right_p2 = false;
+
+    private AudioClip bgm;
     
     public ModeScene(MainPanel.GameStatusChangeListener gsChangeListener){
         super(gsChangeListener);
+        this.bgm = ResourcesManager.getInstance().getSound("sound/Menu.au");
         this.background = new GameObject(0,-22,500, 700, 600, 840,"background/MenuBackground.png");
         this.choosingFrame = new GameObject(50,110,400,200,400, 200,"background/ChooseFrame.png");
         this.frame = new GameObject(45+21,195,74,74, 74, 74,"background/Frame.png");
@@ -60,7 +64,7 @@ public class ModeScene extends Scene{
         this.isRead = false;
         this.player1 = new Actor(250, road.getY() - 32, 32, 32, 32, 32, MainPanel.player1);
         isPicked_1 = isPicked_2 = false;
-        game_story = true;
+        game_story = false;
         game_infinity = game_2p = false;
         this.introduction = new GameObject(this.player1.getX() - 32, this.player1.getY() - 180, 162, 180,225, 250, "background/ModeGuide.png");
     }
@@ -281,7 +285,7 @@ public class ModeScene extends Scene{
         }
         // 進入故事模式
         if(game_story && hole.checkCollision(player1)){
-            BGM_MENU.stop();
+            bgm.stop();
             gsChangeListener.changeScene(MainPanel.LOADING_SCENE);
         }
 
@@ -301,7 +305,7 @@ public class ModeScene extends Scene{
             }
         // 進入無限模式
         if(game_infinity && hole.checkCollision(player1) && isPicked_1){
-            BGM_MENU.stop();
+            bgm.stop();
             gsChangeListener.changeScene(MainPanel.INFINITY_GAME_SCENE);
         }
 
@@ -323,7 +327,7 @@ public class ModeScene extends Scene{
             }
         }
         if(game_2p && hole.checkCollision(player1) && hole.checkCollision(player2) && (isPicked_1 && isPicked_2)){
-            BGM_MENU.stop();
+            bgm.stop();
             gsChangeListener.changeScene(MainPanel.TWO_PLAYER_GAME_SCENE);
         }
     }

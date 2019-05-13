@@ -11,17 +11,22 @@ import java.util.ArrayList;
 public class FloorGenerator {
 
     private static FloorGenerator floorGenerator;
+    private TrapGenerator trapGenerator;
 
-    public static FloorGenerator getInstance(){
-        if (floorGenerator == null){
-            floorGenerator = new FloorGenerator();
-        }
-        return floorGenerator;
+//    public static FloorGenerator getInstance(){
+//        if (floorGenerator == null){
+//            floorGenerator = new FloorGenerator();
+//        }
+//        return floorGenerator;
+//    }
+
+    public FloorGenerator(){
+        trapGenerator = new TrapGenerator();
     }
 
     // 傳入當前層數，調整生成機率
     public Floor genFloor(ArrayList<Floor> floors, Floor last, int layer){
-        Trap trap = TrapGenerator.getInstance().genTrap(layer);
+        Trap trap = trapGenerator.genTrap(layer);
         Floor floor = new Floor(getRandom(0, MainPanel.window.width - 64), last.y + getRandom(50, 70), trap);
         if (layer >= 10){
             if ((float)(- 1 * (layer / 10)) < -3){
@@ -34,7 +39,7 @@ public class FloorGenerator {
     }
 
     public Floor genDancingFloor(Floor current){
-        Trap trap = TrapGenerator.getInstance().genSpecificTrap(TrapGenerator.TRAP_DANCING);
+        Trap trap = trapGenerator.genSpecificTrap(TrapGenerator.TRAP_DANCING);
         Floor floor = new Floor(current.x, current.y + 32, trap);
         floor.setSpeedY(0);
         return floor;

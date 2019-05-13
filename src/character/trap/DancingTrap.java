@@ -23,7 +23,10 @@ public class DancingTrap implements Trap {
     private ArrayList<Integer> directions;
     private int count = 0;
 
+    private PainterManager pm;
+
     public DancingTrap(){
+        pm = new PainterManager();
         // 隨機生成不同順序的跳舞機
         images = new ArrayList<>();
         imagesPaths = new ArrayList<>();
@@ -35,7 +38,7 @@ public class DancingTrap implements Trap {
             directions.add(imagesPaths.get(random).charAt(19) - 48);
             imagesPaths.remove(random);
         }
-        image = PainterManager.mergeImages(images);
+        image = pm.mergeImages(images);
     }
 
     @Override
@@ -63,7 +66,7 @@ public class DancingTrap implements Trap {
                 floor.getFloorImages().remove(0); // 把原圖清掉
                 // 製作新圖
                 images.set(count++, ResourcesManager.getInstance().getImage(imagePath));
-                floor.getFloorImages().add(PainterManager.mergeImages(images)); // 塞新圖回去
+                floor.getFloorImages().add(pm.mergeImages(images)); // 塞新圖回去
             }else {
 //                Scene.ERROR.play();
             }

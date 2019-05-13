@@ -8,7 +8,9 @@ import character.trap.TrapGenerator;
 import frame.GameFrame;
 import frame.MainPanel;
 import util.PainterManager;
+import util.ResourcesManager;
 
+import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
@@ -25,6 +27,8 @@ public class InfinityGameScene extends Scene {
     private AnimationGameObject fire_left, fire_right;
     private Actor player;
     private ArrayList<Floor> floors;
+    private FloorGenerator fg;
+    private TrapGenerator tg;
 
     // 名稱儲存
     private String name; // 儲存名稱
@@ -64,9 +68,14 @@ public class InfinityGameScene extends Scene {
     // 人物操控
     private boolean up = false, down = false, left = false, right = false;
 
+    // 音效
+    private AudioClip bgm;
+
     public InfinityGameScene(MainPanel.GameStatusChangeListener gsChangeListener) {
         super(gsChangeListener);
-        BGM_INFINITY.loop();
+//        BGM_INFINITY.loop();
+        bgm = ResourcesManager.getInstance().getSound("sound/InfinityMode.au");
+        bgm.loop();
         // 場景物件
         setSceneObject();
         roof = new GameObject(0, 0, 500, 64, 500, 64,"background/Roof.png");
@@ -78,10 +87,12 @@ public class InfinityGameScene extends Scene {
         hungerBack = new GameObject(96, 16, 100, 16,5, 5, "background/Hunger.png");
         hungerCount = new GameObject(96, 16, 0, 16, 5, 5, "background/HungerCount.png");
         // 初始10塊階梯
+        fg = new FloorGenerator();
+        tg = new TrapGenerator();
         floors = new ArrayList<>();
-        floors.add(new Floor(player.getModX() - (64 - 32), 200 + 32, TrapGenerator.getInstance().genSpecificTrap(0))); // 初始站立
+        floors.add(new Floor(player.getModX() - (64 - 32), 200 + 32, tg.genSpecificTrap(0))); // 初始站立
         for (int i = 0; i < 14; i++) {
-            floors.add(FloorGenerator.getInstance().genFloor(floors, floors.get(i), layer));
+            floors.add(fg.genFloor(floors, floors.get(i), layer));
         }
         isCalled = false;
         isPause = false;
@@ -196,7 +207,7 @@ public class InfinityGameScene extends Scene {
                             } catch (IOException e1) {
                                 e1.printStackTrace();
                             }
-                            BGM_INFINITY.stop();
+                            bgm.stop();
                             VICTORY.loop();
                             gsChangeListener.changeScene(MainPanel.LEADER_BOARD_SCENE);
                         }
@@ -244,7 +255,7 @@ public class InfinityGameScene extends Scene {
                         if (chooser == button_menu){
                             button_menu.setImageOffsetX(0);
                             BUTTON_CLICK.play();
-                            BGM_INFINITY.stop();
+                            bgm.stop();
                             gsChangeListener.changeScene(MainPanel.MENU_SCENE);
                         }
                         isCalled = false;
@@ -271,7 +282,7 @@ public class InfinityGameScene extends Scene {
                 if (floorAmount < 15 && floors.size() < 20){
                     for (int i = 0; i < 15 - floorAmount; i++) {
                         // 傳入現在層數，生成器將依此更新生成機率
-                        floors.add(FloorGenerator.getInstance().genFloor(floors, findLast(), layer));
+                        floors.add(fg.genFloor(floors, findLast(), layer));
                     }
                 }
                 // 逆向摩擦力
@@ -290,6 +301,7 @@ public class InfinityGameScene extends Scene {
                     floors.get(i).stay();
                     if (checkTopBoundary(floors.get(i))){
                         floors.remove(i);
+                        break;
                     }
                 }
                 if (checkTopBoundary(player)){
@@ -335,7 +347,7 @@ public class InfinityGameScene extends Scene {
                         if (isOnBoard){
                             playerInfos[rank] = new PlayerInfo(String.valueOf(name), player.getScore());
                         }else {
-                            BGM_INFINITY.stop();
+                            bgm.stop();
                             gsChangeListener.changeScene(MainPanel.GAME_OVER_SCENE);
                         }
                     }

@@ -1,7 +1,7 @@
 package frame.scene;
 
 import frame.MainPanel;
-import sun.jvm.hotspot.memory.SystemDictionary;
+//import sun.jvm.hotspot.memory.SystemDictionary;
 import util.ResourcesManager;
 import util.TypingMachine;
 
@@ -54,9 +54,11 @@ public class LoadingScene extends Scene {
                 key = e.getKeyCode();
                 switch (key){
                     case KeyEvent.VK_ESCAPE:
+                        TYPING.stop();
                         gsChangeListener.changeScene(MainPanel.STORY_GAME_SCENE);
                         break;
                     case KeyEvent.VK_ENTER:
+                        TYPING.stop();
                         gsChangeListener.changeScene(MainPanel.STORY_GAME_SCENE);
                         break;
                 }
@@ -71,7 +73,7 @@ public class LoadingScene extends Scene {
         g.setColor(Color.WHITE);
         g.drawImage(background, 0, 0, MainPanel.window.width, MainPanel.window.height, null);
 //        System.out.println(tm.typing(g, message.split("\n"), 2, 200, 650));
-        if (tm.typing(g, message.split("\n"), 3, 200, 650)){
+        if (tm.typing(g, message.split("\n"), 3, 250, 650)){
             isTyping = false;
             TYPING.stop();
         }

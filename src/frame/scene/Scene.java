@@ -30,11 +30,11 @@ public abstract class Scene {
     public static final AudioClip TYPING = ResourcesManager.getInstance().getSound("sound/typing1.au");
     public static final AudioClip VICTORY = ResourcesManager.getInstance().getSound("sound/Victory2.au");
     public static final AudioClip BUTTON_CLICK = ResourcesManager.getInstance().getSound("sound/ButtonClick.au");
-    public static final AudioClip BGM_MENU = ResourcesManager.getInstance().getSound("sound/Menu.au");
-    public static final AudioClip BGM_END = ResourcesManager.getInstance().getSound("sound/Victory2.au");
-    public static final AudioClip BGM_INFINITY = ResourcesManager.getInstance().getSound("sound/InfinityMode.au");
-    public static final AudioClip BGM_STORY = ResourcesManager.getInstance().getSound("sound/StoryMode.au");
-    public static final AudioClip BGM_TWO_PLAYER = ResourcesManager.getInstance().getSound("sound/Menu1.au");
+//    public static final AudioClip BGM_MENU = ResourcesManager.getInstance().getSound("sound/Menu.au");
+//    public static final AudioClip BGM_END = ResourcesManager.getInstance().getSound("sound/Victory2.au");
+//    public static final AudioClip BGM_INFINITY = ResourcesManager.getInstance().getSound("sound/InfinityMode.au");
+//    public static final AudioClip BGM_STORY = ResourcesManager.getInstance().getSound("sound/StoryMode.au");
+//    public static final AudioClip BGM_TWO_PLAYER = ResourcesManager.getInstance().getSound("sound/Menu1.au");
 
     MainPanel.GameStatusChangeListener gsChangeListener;
 
@@ -70,19 +70,5 @@ public abstract class Scene {
         isDark = state;
     }
 
-//    public static boolean isIsCorrect() {
-//        return isCorrect;
-//    }
-//
-//    public static void setIsCorrect(boolean isCorrect) {
-//        Scene.isCorrect = isCorrect;
-//    }
-//
-//    public static boolean isIsWrong() {
-//        return isWrong;
-//    }
-//
-//    public static void setIsWrong(boolean isWrong) {
-//        Scene.isWrong = isWrong;
-//    }
+
 }

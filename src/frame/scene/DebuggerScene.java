@@ -27,6 +27,8 @@ public class DebuggerScene extends Scene {
     private AnimationGameObject fire_left, fire_right;
     private Actor player;
     private ArrayList<Floor> floors;
+    private FloorGenerator fg;
+    private TrapGenerator tg;
 
     // 名稱儲存
     private String name; // 儲存名稱
@@ -67,6 +69,8 @@ public class DebuggerScene extends Scene {
 
     public DebuggerScene(MainPanel.GameStatusChangeListener gsChangeListener) {
         super(gsChangeListener);
+        fg = new FloorGenerator();
+        tg = new TrapGenerator();
         debuggerScene = this;
         // 場景物件
         setSceneObject();
@@ -79,15 +83,15 @@ public class DebuggerScene extends Scene {
         hungerCount = new GameObject(96, 16, 0, 16, 5, 5, "background/HungerCount.png");
         // 初始10塊階梯
         floors = new ArrayList<>();
-        floors.add(new Floor(player.getModX() - (64 - 32), 200 + 32, TrapGenerator.getInstance().genSpecificTrap(TrapGenerator.TRAP_NORMAL))); // 初始站立
-        floors.add(new Floor(player.getModX() - (64 - 32) + 64, 200 + 32, TrapGenerator.getInstance().genSpecificTrap(TrapGenerator.TRAP_NORMAL))); // 初始站立
-        floors.add(new Floor(player.getModX() - (64 - 32) + 64 + 64, 200 + 32, TrapGenerator.getInstance().genSpecificTrap(TrapGenerator.TRAP_NORMAL))); // 初始站立
+        floors.add(new Floor(player.getModX() - (64 - 32), 200 + 32, tg.genSpecificTrap(TrapGenerator.TRAP_NORMAL))); // 初始站立
+        floors.add(new Floor(player.getModX() - (64 - 32) + 64, 200 + 32, tg.genSpecificTrap(TrapGenerator.TRAP_NORMAL))); // 初始站立
+        floors.add(new Floor(player.getModX() - (64 - 32) + 64 + 64, 200 + 32, tg.genSpecificTrap(TrapGenerator.TRAP_NORMAL))); // 初始站立
 //        floors.add(new Floor(player.getModX() - 96, 200 + 32, TrapGenerator.getInstance().genSpecificTrap(TrapGenerator.TRAP_DARKNESS))); // 初始站立
-        Floor dFloor = new Floor(player.getModX() - 96, 400 + 32, TrapGenerator.getInstance().genSpecificTrap(TrapGenerator.TRAP_DARKNESS));
+        Floor dFloor = new Floor(player.getModX() - 96, 400 + 32, tg.genSpecificTrap(TrapGenerator.TRAP_DARKNESS));
         dFloor.setSpeedY(-1);
         floors.add(dFloor); // 初始站立
-        floors.add(new Floor(player.getModX() - 96 - 64, 200 + 32, TrapGenerator.getInstance().genSpecificTrap(TrapGenerator.TRAP_FLIPPING))); // 初始站立
-        floors.add(new Floor(player.getModX() - 96 - 64 - 64, 200 + 32, TrapGenerator.getInstance().genSpecificTrap(TrapGenerator.TRAP_RUNNING))); // 初始站立
+        floors.add(new Floor(player.getModX() - 96 - 64, 200 + 32, tg.genSpecificTrap(TrapGenerator.TRAP_FLIPPING))); // 初始站立
+        floors.add(new Floor(player.getModX() - 96 - 64 - 64, 200 + 32, tg.genSpecificTrap(TrapGenerator.TRAP_RUNNING))); // 初始站立
 //        for (int i = 0; i < 9; i++) {
 //            floors.add(FloorGenerator.getInstance().genFloor(floors, floors.get(i), 0));
 //        }
@@ -261,7 +265,7 @@ public class DebuggerScene extends Scene {
                 if (floorAmount < 10 && floors.size() < 20){
                     for (int i = 0; i < 10 - floorAmount; i++) {
                         // 傳入現在層數，生成器將依此更新生成機率
-                        floors.add(FloorGenerator.getInstance().genFloor(floors, findLast(), layer));
+                        floors.add(fg.genFloor(floors, findLast(), layer));
                     }
                 }
 //                System.out.println(player.isOn());

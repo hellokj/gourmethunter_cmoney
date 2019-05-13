@@ -23,6 +23,7 @@ public class GuideScene_2 extends Scene {
     private GameObject hungerCount, hungerBack, hungerLabel;
     private GameObject frameS,frameG,frameS2,frameG2;
     private GameObject hint,num1,num2,num3;
+    private TrapGenerator tg;
     private Floor floorStone,floorDarkness,floorFlipping;
     private Actor player1,player2,player3;
     private int choose;
@@ -30,6 +31,7 @@ public class GuideScene_2 extends Scene {
 
     public GuideScene_2(MainPanel.GameStatusChangeListener gsChangeListener) {
         super(gsChangeListener);
+        this.tg = new TrapGenerator();
         this.background = new GameObject(0,0,500,700,1024, 768,"background/EndBackground.png");
         this.frameS = new GameObject(80,70,150,250, 150, 250,"background/frameS.png");
         this.frameG = new GameObject(250,70,150,250,150, 250,"background/frameG.png");
@@ -40,9 +42,9 @@ public class GuideScene_2 extends Scene {
         this.num1 = new GameObject(90,80,30,30,32, 32,"background/num1.png");
         this.num2 = new GameObject(260,80,30,30,32, 32,"background/num2.png");
         this.num3 = new GameObject(90,340,30,30,32, 32,"background/num3.png");
-        floorStone = new Floor(130, 270, TrapGenerator.getInstance().genSpecificTrap(TrapGenerator.TRAP_STONE));
-        floorFlipping = new Floor(300, 270, TrapGenerator.getInstance().genSpecificTrap(TrapGenerator.TRAP_FLIPPING));
-        floorDarkness = new Floor(130, 530, TrapGenerator.getInstance().genSpecificTrap(TrapGenerator.TRAP_DARKNESS));
+        floorStone = new Floor(130, 270, tg.genSpecificTrap(TrapGenerator.TRAP_FLIPPING));
+        floorDarkness = new Floor(130, 530, tg.genSpecificTrap(TrapGenerator.TRAP_DARKNESS));
+        floorFlipping = new Floor(300, 270, tg.genSpecificTrap(TrapGenerator.TRAP_FLIPPING));
         player1 = new Actor(140, 130, 32, 32, 32, 32, "actor/Actor1.png");
         player1.setHunger(30);
         player2 = new Actor(310, 130, 32, 32,32, 32, "actor/Actor1.png");

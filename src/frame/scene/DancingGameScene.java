@@ -19,6 +19,8 @@ public class DancingGameScene extends Scene {
     private Actor player;
     private ArrayList<Floor> floors;
     private Floor floor;
+    private FloorGenerator fg;
+    private TrapGenerator tg;
 
     // 選單相關
     private boolean isCalled;
@@ -55,12 +57,14 @@ public class DancingGameScene extends Scene {
         endingFloor = new GameObject(0, 700 - 32, 500, 32, 500, 32,"floor/EndingFloor.png");
         endingGate = new AnimationGameObject(300, endingFloor.getTop() - 64, 64, 64, 64, 64, "background/Door.png");
         // 生成初始階梯
+        fg = new FloorGenerator();
+        tg = new TrapGenerator();
         floors = new ArrayList<>();
-        floor = new Floor((int) (250 * MainPanel.ratio) - 32, 150 + 32, TrapGenerator.getInstance().genSpecificTrap(TrapGenerator.TRAP_DANCING));
+        floor = new Floor((int) (250 * MainPanel.ratio) - 32, 150 + 32, tg.genSpecificTrap(TrapGenerator.TRAP_DANCING));
         floor.setSpeedY(0);
         floors.add(floor);
         for (int i = 0; i < 14; i++) {
-            floors.add(FloorGenerator.getInstance().genDancingFloor(floors.get(i)));
+            floors.add(fg.genDancingFloor(floors.get(i)));
         }
         player = new Actor(250 - 16, 150, 32, 32, 32, 32,MainPanel.player1);
     }
@@ -163,7 +167,6 @@ public class DancingGameScene extends Scene {
                         if (chooser == button_menu){
                             button_menu.setImageOffsetX(0);
                             BUTTON_CLICK.play();
-                            BGM_INFINITY.stop();
                             gsChangeListener.changeScene(MainPanel.MENU_SCENE);
                         }
                         isCalled = false;
@@ -212,7 +215,6 @@ public class DancingGameScene extends Scene {
                 if (endingGate.checkCollision(player)){
                     endingGate.playAnimation();
                     if (key == KeyEvent.VK_UP){
-                        BGM_STORY.stop();
                         gsChangeListener.changeScene(MainPanel.MENU_SCENE);
                     }
                 }
