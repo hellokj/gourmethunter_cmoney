@@ -174,19 +174,6 @@ public class ModeScene extends Scene{
                             }
                         }
                         break;
-                    case KeyEvent.VK_ENTER:
-                        if (game_infinity || game_2p){
-                            if (!isPicked_1){
-                                isPicked_1 = true;
-                            }else {
-                                if (game_2p){
-                                    if (!isPicked_2){
-                                        isPicked_2 = true;
-                                    }
-                                }
-                            }
-                        }
-                        break;
                     case KeyEvent.VK_ESCAPE:
                         isRead = true;
                         break;
@@ -220,6 +207,22 @@ public class ModeScene extends Scene{
                         break;
                     case KeyEvent.VK_D:
                         right_p2 = false;
+                        break;
+                    case KeyEvent.VK_ENTER:
+                        if (game_infinity || game_2p){
+                            if (!isPicked_1){
+                                BUTTON_CLICK.play();
+                                isPicked_1 = true;
+                                frame.setX(45+21);
+                            }else {
+                                if (game_2p){
+                                    if (!isPicked_2){
+                                        BUTTON_CLICK.play();
+                                        isPicked_2 = true;
+                                    }
+                                }
+                            }
+                        }
                         break;
                 }
             }
@@ -368,8 +371,13 @@ public class ModeScene extends Scene{
             picker.paint(g, mainPanel);
         }
         if (game_2p){
-            picker1.paint(g, mainPanel);
-            picker2.paint(g, mainPanel);
+            if (!isPicked_1){
+                picker1.paint(g, mainPanel);
+            }else {
+                if (!isPicked_2){
+                    picker2.paint(g, mainPanel);
+                }
+            }
             player2.paint(g, mainPanel);
             String msg = "2P";
             g.setFont(MainPanel.ENGLISH_FONT.deriveFont(36.0f*MainPanel.RATIO));

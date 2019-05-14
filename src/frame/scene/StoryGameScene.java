@@ -84,7 +84,7 @@ public class StoryGameScene extends Scene {
         floors = new ArrayList<>();
         floors.add(new Floor(player.getX() - (64 - 32), 200 + 32, tg.genSpecificTrap(TrapGenerator.TRAP_NORMAL))); // 初始站立
         for (int i = 0; i < 14; i++) {
-            floors.add(fg.genFloor(floors, floors.get(i), 0));
+            floors.add(fg.genFloor(floors, floors.get(i), 10));
         }
         isOver = false;
         isCalled = false;
@@ -220,7 +220,7 @@ public class StoryGameScene extends Scene {
                 hungerValue = player.getHunger();
                 if (floorAmount < 15 && time > 6 && floors.size() < 20){
                     for (int i = 0; i < 15 - floorAmount; i++) {
-                        floors.add(fg.genFloor(floors, findLast(), 0));
+                        floors.add(fg.genFloor(floors, findLast(), 10));
                     }
                 }
                 // 逆向摩擦力

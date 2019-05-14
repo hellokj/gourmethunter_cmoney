@@ -200,7 +200,7 @@ public class DancingGameScene extends Scene {
                     floor.update();
                     if (floor.isCompleted()){
 
-                        floor.setX(0);
+                        floor.setX(-64);
                         floor.setY(0);
                     }
                 }

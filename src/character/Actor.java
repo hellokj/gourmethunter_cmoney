@@ -196,7 +196,7 @@ public class Actor extends AnimationGameObject{
         if (hungerDelayCount++ == hungerDelay){
             if (this.hunger + 5 >= 100){
                 this.hunger = 100;
-//                this.die();
+                this.die();
             }else {
                 this.hunger += 5; // 延遲到了，增加飢餓值
             }
@@ -322,7 +322,7 @@ public class Actor extends AnimationGameObject{
             this.setBoundary();
             if (this.hunger + 10 >= 100){
                 this.hunger = 100;
-//                this.die();
+                this.die();
             }else {
                 this.hunger += 10;
             }
