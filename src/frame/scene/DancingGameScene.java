@@ -50,7 +50,7 @@ public class DancingGameScene extends Scene {
 
     private void setSceneObject() {
         background = new GameObject(0, 0, 500, 700, 500, 700,"background/circus1.png");
-        roof = new GameObject(0, 0, 500, 64, 500, 64,"background/Roof.png");
+        roof = new GameObject(0, -700, 500, 700, 500, 700,"background/BonusRoof.png");
         endingFloor = new GameObject(0, 700 - 32, 500, 32, 500, 32,"floor/EndingFloor.png");
         endingGate = new AnimationGameObject(300, endingFloor.getTop() - 64, 64, 64, 64, 64, "background/Door.png");
         // 生成初始階梯
@@ -312,23 +312,23 @@ public class DancingGameScene extends Scene {
         switch (level){
             case 1:
                 this.fallingDelay = 30;
-                this.fallingAmount = 3;
+                this.fallingAmount = 4;
                 break;
             case 2:
                 this.fallingDelay = 30;
-                this.fallingAmount = 5;
+                this.fallingAmount = 8;
                 break;
             case 3:
                 this.fallingDelay = 30;
-                this.fallingAmount = 6;
+                this.fallingAmount = 12;
                 break;
             case 4:
                 this.fallingDelay = 30;
-                this.fallingAmount = 7;
+                this.fallingAmount = 16;
                 break;
             case 5:
                 this.fallingDelay = 20;
-                this.fallingAmount = 7;
+                this.fallingAmount = 16;
                 break;
         }
     }

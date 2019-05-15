@@ -405,7 +405,7 @@ public class StoryGameScene extends Scene {
         }
 
         if (isDark){
-            g.drawImage(blanket, player.getX() + 16 - 575, player.getY() + 16 - 775, player.getX() + 16 - 575 + 1150, player.getY() + 16 - 775 + 1550,0,0, 1150, 1550, null);
+            g.drawImage(blanket, (int) ((player.getX() + 16 - 575)*MainPanel.RATIO), (int) ((player.getY() + 16 - 775)*MainPanel.RATIO), (int) ((player.getX() + 16 - 575 + 1150)*MainPanel.RATIO), (int) ((player.getY() + 16 - 775 + 1550)*MainPanel.RATIO),0,0, 1150, 1550, null);
         }
         if (isOver){
             endingFloor.paint(g2d, mainPanel);
@@ -484,11 +484,13 @@ public class StoryGameScene extends Scene {
 
     // 更新背景圖
     private void updateBackgroundImage(){
-        if (background_0.getModY() + background_0.getDrawHeight() * MainPanel.RATIO <= 0){
-            background_0 = new GameObject(0, 700, 500, 700, 1417, 1984,"background/EgyptBackground_0.png");
+        if (background_0.getModY() + background_0.getDrawHeight() * MainPanel.RATIO <= 10){
+//            background_0 = new GameObject(0, 700, 500, 700, 1417, 1984,"background/EgyptBackground_0.png");
+            background_0.setY(background_1.getY() + background_1.getDrawHeight());
         }
-        if (background_1.getModY() + background_1.getDrawHeight() * MainPanel.RATIO <= 0){
-            background_1 = new GameObject(0, 700, 500, 700, 1417, 1984,"background/EgyptBackground_0.png");
+        if (background_1.getModY() + background_1.getDrawHeight() * MainPanel.RATIO <= 10){
+//            background_1 = new GameObject(0, 700, 500, 700, 1417, 1984,"background/EgyptBackground_0.png");
+            background_1.setY(background_0.getY() + background_0.getDrawHeight());
         }
         background_0.setY(background_0.getY() - 5);
         background_1.setY(background_1.getY() - 5);

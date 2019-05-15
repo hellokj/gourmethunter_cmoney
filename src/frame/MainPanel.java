@@ -78,7 +78,7 @@ public class MainPanel extends javax.swing.JPanel {
         };
 
         // 更改初始場景
-        changeCurrentScene(genSceneById(MainPanel.INFINITY_GAME_SCENE));
+        changeCurrentScene(genSceneById(MainPanel.MENU_SCENE));
 //        changeCurrentScene(genSceneById(MainPanel.DANCING_GAME_SCENE));
 
 

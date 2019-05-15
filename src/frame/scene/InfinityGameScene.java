@@ -477,7 +477,7 @@ public class InfinityGameScene extends Scene {
         }
 
         if (isDark){
-            g.drawImage(blanket, player.getX() + 16 - 575, player.getY() + 16 - 775, player.getX() + 16 - 575 + 1150, player.getY() + 16 - 775 + 1550,0,0, 1150, 1550, null);
+            g.drawImage(blanket, (int) ((player.getX() + 16 - 575)*MainPanel.RATIO), (int) ((player.getY() + 16 - 775)*MainPanel.RATIO), (int) ((player.getX() + 16 - 575 + 1150)*MainPanel.RATIO), (int) ((player.getY() + 16 - 775 + 1550)*MainPanel.RATIO),0,0, 1150, 1550, null);
         }
 
         roof.paint(g, mainPanel);
@@ -597,13 +597,15 @@ public class InfinityGameScene extends Scene {
     // 更新背景圖
     private void updateBackgroundImage(){
         int background_rising_speed = 5;
-        if (background_0.getModY() + background_0.getDrawHeight() * MainPanel.RATIO <= 0){
-            background_0 = new GameObject(0, 700, 500, 700, 500, 700,"background/circus2.png");
+        if (background_0.getModY() + background_0.getDrawHeight() * MainPanel.RATIO <= 10){
+//            background_0 = new GameObject(0, 700, 500, 700, 500, 700,"background/circus2.png");
+            background_0.setY(background_1.getY() + background_1.getDrawHeight());
             layer++;
             showLayer = true;
         }
-        if (background_1.getModY() + background_1.getDrawHeight() * MainPanel.RATIO <= 0){
-            background_1 = new GameObject(0, 700, 500, 700, 500, 700,"background/circus2.png");
+        if (background_1.getModY() + background_1.getDrawHeight() * MainPanel.RATIO <= 10){
+//            background_1 = new GameObject(0, 700, 500, 700, 500, 700,"background/circus2.png");
+            background_1.setY(background_0.getY() + background_0.getDrawHeight());
         }
         background_0.setY(background_0.getY() - background_rising_speed);
         background_1.setY(background_1.getY() - background_rising_speed);
@@ -694,7 +696,7 @@ public class InfinityGameScene extends Scene {
             String[] eachRow = leaderBoardData[i].split(",");
             playerInfos[i] = new PlayerInfo(eachRow[0], Integer.parseInt(eachRow[1]));
         }
-        for (int i = playerInfos.length - 1; i >= 0; i--) {
+        for (int i = playerInfos.length - 1; i > 0; i--) {
             if (playerInfos[i].getScore() < this.player.getScore()){
                 rank = i;
             }

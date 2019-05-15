@@ -39,13 +39,13 @@ public class Actor extends AnimationGameObject{
     private boolean isEating; // 吃到東西
 
     // 每經過100次刷新，讓飢餓值上升
-    private int hungerDelayCount, hungerDelay = 200;
+    private int hungerDelayCount, hungerDelay = 120;
     private int hunger; // 飢餓程度
     private int score; // 統計總共吃了多少食物
 
     // delay
     private int stayDelayCount, stayDelay;
-    private int invincibleDelayCount, invicibleDelay = 10;
+    private int invincibleDelayCount, invincibleDelay = 40;
     private int jumpCount = 20;
 
     public Actor(int x, int y, int drawWidth, int drawHeight){
@@ -165,7 +165,7 @@ public class Actor extends AnimationGameObject{
             y += speedY;
             checkHunger();
             setBoundary();
-            if (invincibleDelayCount++ == invicibleDelay){
+            if (invincibleDelayCount++ == invincibleDelay){
                 invincibleDelayCount = 0;
                 invincible = false;
             }
