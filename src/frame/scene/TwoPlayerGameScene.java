@@ -34,7 +34,7 @@ public class TwoPlayerGameScene extends Scene {
     private GameObject hungerLabel1, hungerLabel2;
 
     // 數值
-    private int key; // 鍵盤輸入值
+//    private int key; // 鍵盤輸入值
     private int count1, count2; // 死亡跳起計數器
     private int layer; // 地下階層
     private Food eatenFood1, eatenFood2;
@@ -275,6 +275,7 @@ public class TwoPlayerGameScene extends Scene {
                         isCalled = false;
                     }
                 }
+                key = -1;
             }
         };
     }

@@ -42,7 +42,7 @@ public class InfinityGameScene extends Scene {
     private GameObject record;
 
     // 遊戲狀態
-    private int key; // 鍵盤輸入值
+//    private int key; // 鍵盤輸入值
     private int count; // 死亡跳起計數器
     private boolean isOver;
     private int layer; // 地下階層
@@ -218,6 +218,7 @@ public class InfinityGameScene extends Scene {
                         }
                     }
                 }
+                key = e.getKeyCode();
             }
 
             @Override
@@ -258,6 +259,7 @@ public class InfinityGameScene extends Scene {
                         isCalled = false;
                     }
                 }
+                key = -1;
             }
         };
     }

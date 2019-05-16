@@ -27,7 +27,7 @@ public class DancingGameScene extends Scene {
     private Button button_resume, button_menu, button_new_game; // 三個按鈕
 
     // 遊戲狀態
-    private int key; // 鍵盤輸入值
+//    private int key; // 鍵盤輸入值
     private int fallingDelayCount, fallingDelay = 30, fallingAmount = 5; // 天花板掉落計數器
 
     // 人物操控
@@ -71,7 +71,6 @@ public class DancingGameScene extends Scene {
         return new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e){
-                key = e.getKeyCode();
                 switch (e.getKeyCode()){
                     // p1 controller
                     case KeyEvent.VK_RIGHT:
@@ -130,6 +129,7 @@ public class DancingGameScene extends Scene {
                         }
                         break;
                 }
+                key = e.getKeyCode();
             }
 
             @Override
@@ -169,6 +169,7 @@ public class DancingGameScene extends Scene {
                         isCalled = false;
                     }
                 }
+                key = -1;
             }
         };
     }

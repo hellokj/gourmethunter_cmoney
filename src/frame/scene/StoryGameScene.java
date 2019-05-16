@@ -49,7 +49,7 @@ public class StoryGameScene extends Scene {
 
     private boolean isOver; // 結束
 
-    private int key; // 鍵盤輸入值
+//    private int key; // 鍵盤輸入值
     private int count; // 死亡跳起計數器
 
     private int flashCount; //閃光延遲
@@ -103,7 +103,6 @@ public class StoryGameScene extends Scene {
         return new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e){
-                key = e.getKeyCode();
                 switch (e.getKeyCode()){
                     // p1 controller
                     case KeyEvent.VK_RIGHT:
@@ -160,6 +159,7 @@ public class StoryGameScene extends Scene {
                             }
                         }
                 }
+                key = e.getKeyCode();
             }
 
             @Override
@@ -200,6 +200,7 @@ public class StoryGameScene extends Scene {
                         isCalled = false;
                     }
                 }
+                key = -1;
             }
         };
     }
