@@ -24,7 +24,7 @@ public class Floor extends GameObject {
 
     private Trap trapFunction; // 機關
     private boolean isTriggered; // 角色在階梯上，觸發機關
-
+    private boolean FlipState;//是否翻轉********************
     private int drawingDelayCount, drawingDelay, FlipCount; // 繪製動畫延遲
 
     public Floor(int x, int y, Trap trapFunction){
@@ -36,6 +36,8 @@ public class Floor extends GameObject {
         // 傳入陷阱類型，設定自己的狀態
         this.trapFunction.setFloorState(this);
         this.setBoundary();
+        //起始不翻************************
+        this.FlipState = false; 
     }
 
 
@@ -66,11 +68,28 @@ public class Floor extends GameObject {
     public void setCompleted(boolean completed) {
         isCompleted = completed;
     }
+    //設定翻轉*******************
+    public void setFlipstate(boolean boo){
+        this.FlipState = boo;
+    }
 
     // 未被觸發的動畫選圖
     // 某些地板被觸發才播動畫，可能不適用此方法
     public void stay(){
-        if (drawingDelayCount++ == drawingDelay){
+        //若翻轉為true開始翻轉...延遲後翻回*******************
+        if (this.trapFunction instanceof FlippingTrap){
+            this.choosingImagesCounter = 1;
+            if (this.FlipState==true){
+                FlipCount++;
+                System.out.println(FlipCount);
+                if(FlipCount>=10){
+                    this.setChoosingImagesMode(FlippingTrap.CHOOSING_IMAGES_MODE_BASE);
+                  FlipCount = 0;
+                  this.FlipState = false;
+                }
+            }
+        }
+        else if (drawingDelayCount++ == drawingDelay){
             // 超爛做法(只針對特定畫圖模式更動)
             if (this.trapFunction instanceof SpringTrap){
                 if(choosingImagesCounter == 6){
@@ -81,16 +100,7 @@ public class Floor extends GameObject {
             this.choosingImagesCounter++;
             drawingDelayCount = 0;
         }
-        if (this.trapFunction instanceof FlippingTrap){
-            if (FlippingTrap.FlipState==true){
-                System.out.println(FlipCount);
-                if(FlipCount++>=10){
-                  this.choosingImagesMode = FlippingTrap.CHOOSING_IMAGES_MODE_BASE;
-                  FlipCount = 0;
-                  FlippingTrap.FlipState = false;
-                }
-            }
-        }
+        
     }
 
     public void isBeenTouched(Actor player, Scene scene){

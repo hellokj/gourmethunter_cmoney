@@ -7,9 +7,8 @@ import util.ResourcesManager;
 
 public class FlippingTrap implements Trap {
     private final String[] imagePaths = {"floor/FlippingFloor_1.png", "floor/FlippingFloor_2.png"};
-    private static final int[] CHOOSING_IMAGES_MODE_FLIP = {1};
-    public static final int[] CHOOSING_IMAGES_MODE_BASE = {0};
-    public static boolean FlipState;//是否翻轉
+    public static final int[] CHOOSING_IMAGES_MODE_FLIP = {1};//地板翻轉*****************
+    public static final int[] CHOOSING_IMAGES_MODE_BASE = {0};//地板翻回****************
     private int executeDelayCount;
 
     @Override
@@ -24,19 +23,19 @@ public class FlippingTrap implements Trap {
         // 設定選圖模式
         floor.setChoosingImagesMode(CHOOSING_IMAGES_MODE_BASE);
         // 繪製動畫延遲
-        floor.setDrawingDelay(20);
+        floor.setDrawingDelay(1);
         executeDelayCount = 0;
-        FlipState = false;
+        
     }
 
     @Override
     public void execute(Actor player, Floor floor, Scene scene) {
-        // 飢餓值小於40，踩到翻轉，翻後掉落
+        // 飢餓值小於40，踩到翻轉，翻後掉落***********************
         if (++executeDelayCount == 5 && player.getHunger() < 40){
-                floor.setChoosingImagesMode(CHOOSING_IMAGES_MODE_FLIP);
-                player.setY(player.getY()+30);
-                executeDelayCount = 0;
-                FlipState = true;
-        }
+        floor.setFlipstate(true);
+        floor.setChoosingImagesMode(CHOOSING_IMAGES_MODE_FLIP);
+        player.setY(player.getY()+30);
+        executeDelayCount = 0;
+        } 
     }
 }
