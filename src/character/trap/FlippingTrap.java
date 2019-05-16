@@ -7,9 +7,9 @@ import util.ResourcesManager;
 
 public class FlippingTrap implements Trap {
     private final String[] imagePaths = {"floor/FlippingFloor_1.png", "floor/FlippingFloor_2.png"};
-    private static final int[] CHOOSING_IMAGES_MODE = {0, 1};
+    private static final int[] CHOOSING_IMAGES_MODE_FLIP = {1};
     public static final int[] CHOOSING_IMAGES_MODE_BASE = {0};
-
+    public static boolean FlipState;//是否翻轉
     private int executeDelayCount;
 
     @Override
@@ -26,20 +26,17 @@ public class FlippingTrap implements Trap {
         // 繪製動畫延遲
         floor.setDrawingDelay(20);
         executeDelayCount = 0;
+        FlipState = false;
     }
 
     @Override
     public void execute(Actor player, Floor floor, Scene scene) {
         // 飢餓值小於40，踩到翻轉，翻後掉落
-        if (floor.isTriggered()){
-            floor.setChoosingImagesMode(CHOOSING_IMAGES_MODE);
-            if (++executeDelayCount % 20 == 0){
-                if (player.getHunger() < 40){
-                    player.setY(player.getY()+30);
-                }
-            }
-        }else {
-            executeDelayCount = 0;
+        if (++executeDelayCount == 5 && player.getHunger() < 40){
+                floor.setChoosingImagesMode(CHOOSING_IMAGES_MODE_FLIP);
+                player.setY(player.getY()+30);
+                executeDelayCount = 0;
+                FlipState = true;
         }
     }
 }

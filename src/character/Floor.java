@@ -25,7 +25,7 @@ public class Floor extends GameObject {
     private Trap trapFunction; // 機關
     private boolean isTriggered; // 角色在階梯上，觸發機關
 
-    private int drawingDelayCount, drawingDelay; // 繪製動畫延遲
+    private int drawingDelayCount, drawingDelay, FlipCount; // 繪製動畫延遲
 
     public Floor(int x, int y, Trap trapFunction){
         super(x, y);
@@ -77,14 +77,19 @@ public class Floor extends GameObject {
                     this.choosingImagesMode = SpringTrap.CHOOSING_IMAGES_MODE_BASE;
                 }
             }
-            if (this.trapFunction instanceof FlippingTrap){
-                if (choosingImagesCounter == 2){
-                    this.choosingImagesMode = FlippingTrap.CHOOSING_IMAGES_MODE_BASE;
-                }
-            }
             this.choosingImagesCounter = choosingImagesCounter % choosingImagesMode.length;
             this.choosingImagesCounter++;
             drawingDelayCount = 0;
+        }
+        if (this.trapFunction instanceof FlippingTrap){
+            if (FlippingTrap.FlipState==true){
+                System.out.println(FlipCount);
+                if(FlipCount++>=10){
+                  this.choosingImagesMode = FlippingTrap.CHOOSING_IMAGES_MODE_BASE;
+                  FlipCount = 0;
+                  FlippingTrap.FlipState = false;
+                }
+            }
         }
     }
 
