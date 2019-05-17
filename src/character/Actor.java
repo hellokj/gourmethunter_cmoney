@@ -498,14 +498,14 @@ public class Actor extends AnimationGameObject{
 //            g2d.setColor(Color.WHITE);
 //            g2d.drawRect(modX-1, modY-1, (int)(drawWidth*MainPanel.RATIO + 1), (int)(drawHeight*MainPanel.RATIO +1));
         }else { // 骷髏狀態
+            int actualWidth = 24, actualHeight = 48;
+            g.drawImage(image, modX, modY, modX + (int)(drawWidth*MainPanel.RATIO), modY + (int)(drawHeight*MainPanel.RATIO),
+                    (imageWidth*imageOffsetX),imageOffsetY*imageHeight, imageWidth*imageOffsetX + imageWidth, imageOffsetY*imageHeight + imageHeight, null);
             this.drawWidth = 32;
             this.drawHeight = 64;
             this.imageWidth = 32;
             this.imageHeight = 64;
             setBoundary();
-            int actualWidth = 24, actualHeight = 48;
-            g.drawImage(image, modX, modY, modX + (int)(drawWidth*MainPanel.RATIO), modY + (int)(drawHeight*MainPanel.RATIO),
-                    (imageWidth*imageOffsetX),imageOffsetY*imageHeight, imageWidth*imageOffsetX + imageWidth, imageOffsetY*imageHeight + imageHeight, null);
 //            g2d.setColor(Color.WHITE);
 //            g2d.drawRect(modX-1, modY-1, (int)(drawWidth*MainPanel.RATIO + 1), (int)(drawHeight*MainPanel.RATIO +1));
 //            g2d.setColor(Color.RED);

@@ -345,21 +345,25 @@ public class ModeScene extends Scene{
     @Override
     public void paint(Graphics g, MainPanel mainPanel) {
         background.paint(g, mainPanel);
-        if (game_story || game_infinity || game_2p){
-            arrow.paint(g, mainPanel);
-        }
         if (game_story){
+            arrow.paint(g, mainPanel);
             fattyFrame.paint(g, mainPanel);
             fattyCharacter.paint(g, mainPanel);
         }
         if (game_infinity || game_2p){
             choosingFrame.paint(g, mainPanel);
             if (game_infinity){
+                if (isPicked_1){
+                    arrow.paint(g, mainPanel);
+                }
                 if (!isPicked_1){
                     frame.paint(g, mainPanel);
                 }
             }
             if (game_2p){
+                if (isPicked_1 && isPicked_2){
+                    arrow.paint(g, mainPanel);
+                }
                 if (!isPicked_1 || !isPicked_2){
                     frame.paint(g, mainPanel);
                 }
